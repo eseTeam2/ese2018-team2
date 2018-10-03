@@ -1,7 +1,8 @@
 import React from "react";
 import JobList from "../components/joblist/JobList";
 import JobItem from "../components/joblist/JobItem";
-import { Container, Header } from "semantic-ui-react";
+import { Header } from "semantic-ui-react";
+import Layout from "../components/layout/Layout";
 
 interface Job {
   id: string;
@@ -38,12 +39,14 @@ const joblist: Array<Job> = [
 ];
 
 export default () => (
-  <Container>
-    <Header as={"h1"}>Job List</Header>
+  <Layout>
+    <Header as={"h1"} textAlign="center">
+      Job List
+    </Header>
     <JobList>
       {joblist.map(job => (
         <JobItem job={job} key={job.id} />
       ))}
     </JobList>
-  </Container>
+  </Layout>
 );
