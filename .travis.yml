@@ -16,3 +16,4 @@ matrix:
         - go mod download
       script:
         - go build cmd/backend/main.go
+        - go test -v cmd/backend/**/*.go
