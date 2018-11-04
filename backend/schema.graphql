@@ -44,5 +44,4 @@ type Query {
   jobs(id: String): [Job]!
   organizations: [Organization]!
   me: User!
-  myLikes: [Job]
 }

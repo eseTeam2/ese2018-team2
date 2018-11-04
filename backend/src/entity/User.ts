@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   JoinTable,
   ManyToMany,
   PrimaryGeneratedColumn
@@ -28,6 +29,16 @@ export class User {
   password: string;
 
   @ManyToMany(type => Job, job => job.userLikes)
-  @JoinTable({ name: "users_liked_jobs_jobs" })
+  @JoinTable({
+    name: "likes",
+    joinColumn: {
+      name: "userId",
+      referencedColumnName: "id"
+    },
+    inverseJoinColumn: {
+      name: "jobId",
+      referencedColumnName: "id"
+    }
+  })
   likedJobs: Job[];
 }
