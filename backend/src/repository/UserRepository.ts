@@ -48,8 +48,8 @@ export class UserRepository {
   async likeJob(jobId: string, session: Express.Session) {
     this.checkAuth(session);
 
-    const user = this.users.findOneOrFail(session.user.id);
-    const job = this.jobs.findOneOrFail(jobId);
+    const user = await this.users.findOneOrFail(session.user.id);
+    const job = await this.jobs.findOneOrFail(jobId);
 
     await getConnection()
       .createQueryBuilder()

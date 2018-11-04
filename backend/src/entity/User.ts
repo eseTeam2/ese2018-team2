@@ -1,7 +1,6 @@
 import {
   Column,
   Entity,
-  JoinColumn,
   JoinTable,
   ManyToMany,
   PrimaryGeneratedColumn
@@ -28,9 +27,9 @@ export class User {
   @Column("text")
   password: string;
 
-  @ManyToMany(type => Job, job => job.userLikes)
+  @ManyToMany(type => Job, job => job.usersLiked, { eager: true })
   @JoinTable({
-    name: "likes",
+    name: "like",
     joinColumn: {
       name: "userId",
       referencedColumnName: "id"
@@ -40,5 +39,5 @@ export class User {
       referencedColumnName: "id"
     }
   })
-  likedJobs: Job[];
+  likedJobs: Promise<Job[]>;
 }
