@@ -21,8 +21,6 @@ export class JobRepository {
 
   // TODO create interface for argument type
   getJobs(args: any): Promise<Job[]> {
-    console.log(args);
-
     if (args.id) {
       return this.jobs.findByIds([args.id]);
     }
@@ -53,7 +51,7 @@ export class JobRepository {
 
   async updateJob(args: JobUpdateArgs): Promise<Job> {
     const id = Object.entries(args)
-      .filter(e => e[0] === "id")
+      .filter(e => e[0] === "userId")
       .map(e => e[1])[0];
 
     const fieldsToUpdate = Object.entries(args)

@@ -12,17 +12,17 @@ import { Organization } from "./entity/Organization";
 import { User } from "./entity/User";
 import { OrganizationRepository } from "./repository/OrganizationRepository";
 import config from "./config";
-import { Init1539529717124 } from "./migration/1539529717124-Init";
-import { Skill } from "./entity/Skill";
+import { Role } from "./entity/Role";
 import session from "express-session";
-import { UserRepository } from "./repository/UserRpository";
+import { UserRepository } from "./repository/UserRepository";
+import { Init1541366395158 } from "./migration/1541366395158-Init";
 
 //TODO environment variable for logging (e.g. NODE_ENV)
 createConnection({
   type: "postgres",
   url: config.get("database_url"),
-  entities: [Job, Organization, User, Skill],
-  migrations: [Init1539529717124],
+  entities: [Job, Organization, User, Role],
+  migrations: [Init1541366395158],
   logging: true
 }).then(async connection => {
   await connection.runMigrations({ transaction: true });
@@ -41,6 +41,11 @@ createConnection({
     .createQueryBuilder()
     .delete()
     .from(Organization)
+    .execute();
+  await connection
+    .createQueryBuilder()
+    .delete()
+    .from(User)
     .execute();
 
   const exampleOrgs = ["Organization 1", "Organization 2", "Organization 3"];
