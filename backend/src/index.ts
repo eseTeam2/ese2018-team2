@@ -17,14 +17,14 @@ import session from "express-session";
 import { UserRepository } from "./repository/UserRepository";
 import { JobApplication } from "./entity/JobApplication";
 import { JobApplicationRepository } from "./repository/JobApplicationRepository";
-import { Init1541851040206 } from "./migration/1541851040206-Init";
+import { Init1541963491779 } from "./migration/1541963491779-Init";
 
 //TODO environment variable for logging (e.g. NODE_ENV)
 createConnection({
   type: "postgres",
   url: config.get("database_url"),
   entities: [Job, Organization, User, Role, JobApplication],
-  migrations: [Init1541851040206],
+  migrations: [Init1541963491779],
   logging: true
 }).then(async connection => {
   await connection.runMigrations({ transaction: true });
