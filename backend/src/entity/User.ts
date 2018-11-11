@@ -1,11 +1,4 @@
-import {
-  Column,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  PrimaryGeneratedColumn
-} from "typeorm";
-import { Job } from "./Job";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 
 @Entity("users")
 export class User {
@@ -26,10 +19,4 @@ export class User {
 
   @Column("text")
   password: string;
-
-  @ManyToMany(type => Job, job => job.usersBookmarked)
-  @JoinTable({
-    name: "bookmarks"
-  })
-  bookmarkedJobs: Promise<Job[]>;
 }

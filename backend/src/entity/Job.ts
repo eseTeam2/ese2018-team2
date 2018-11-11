@@ -7,8 +7,7 @@ import {
   JoinTable
 } from "typeorm";
 import { Organization } from "./Organization";
-import { Role } from "./Role";
-import { User } from "./User";
+import { Skill } from "./Skill";
 
 @Entity("jobs")
 export class Job {
@@ -35,9 +34,7 @@ export class Job {
   @Column({ nullable: true })
   end: Date;
 
+  @ManyToMany(type => Skill)
   @JoinTable()
-  roles: Promise<Role[]>;
-
-  @ManyToMany(type => User, user => user.bookmarkedJobs)
-  usersBookmarked: Promise<User[]>;
+  skills: Promise<Skill[]>;
 }

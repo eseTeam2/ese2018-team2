@@ -5,9 +5,9 @@ import { makeExecutableSchema } from "graphql-tools";
 import { Context, Job } from "../../../types";
 import JobRepository from "../../../repository/JobRepository";
 import { OrganizationRepository } from "../../../repository/OrganizationRepository";
-import { UserRepository } from "../../../repository/UserRepository";
+import { UserRepository } from "../../../repository/UserRpository";
 
-describe("Get likedJobs", () => {
+describe("Get jobs", () => {
   const schema = makeExecutableSchema({
     typeDefs: importSchema("./schema.graphql"),
     resolvers

@@ -1,6 +1,6 @@
 import { JobRepository } from "./repository/JobRepository";
 import { OrganizationRepository } from "./repository/OrganizationRepository";
-import { UserRepository } from "./repository/UserRepository";
+import { UserRepository } from "./repository/UserRpository";
 
 export interface Context {
   jobRepository: JobRepository;
