@@ -20,6 +20,7 @@ services:
       - "4000:4000"
     environment:
       - DATABASE_URL=postgres://postgres@postgres/postgres
+      - REDIS_URL=redis://redis:6379
   frontend:
     container_name: "Frontend"
     links:
