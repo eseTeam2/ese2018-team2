@@ -14,6 +14,7 @@ import {
 import JobItem from "../components/joblist/JobItem";
 import NavBar from "../components/layout/header/NavBar";
 import Link from "next/link";
+import MatchingJobs from "../components/Job/Dashboard/MatchingJobs";
 
 export const GET_ALL_JOBS = gql`
   query AllJobs {
