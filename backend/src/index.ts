@@ -17,14 +17,14 @@ import { JobRepository } from "./repository/JobRepository";
 import { OrganizationRepository } from "./repository/OrganizationRepository";
 import { UserRepository } from "./repository/UserRepository";
 import client from "./lib/redis";
-import { Init1542577295817 } from "./migration/1542577295817-Init";
+import { Init1542578388222 } from "./migration/1542578388222-Init";
 
 //TODO environment variable for logging (e.g. NODE_ENV)
 createConnection({
   type: "postgres",
   url: config.get("database_url"),
   entities: [Job, Organization, User, Role, JobApplication],
-  migrations: [Init1542577295817],
+  migrations: [Init1542578388222],
   logging: true
 }).then(async connection => {
   await connection.runMigrations({ transaction: true });
@@ -96,7 +96,7 @@ createConnection({
     admin.lastname = "Müller";
     admin.password = bcrypt.hashSync("123456", bcrypt.genSaltSync(10));
     admin.phone = "+41 123 456 34 34";
-    admin.admin = true;
+    admin.siteAdmin = true;
 
     await connection.getRepository(User).save(admin);
 

@@ -1,18 +1,17 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
+  Generated,
   JoinTable,
   ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
-  CreateDateColumn,
   UpdateDateColumn,
-  VersionColumn,
-  Generated
+  VersionColumn
 } from "typeorm";
 import { Job } from "./Job";
 import { JobApplication } from "./JobApplication";
-import { default_type } from "mime";
 
 @Entity("users")
 export class User {
@@ -39,7 +38,7 @@ export class User {
   sequenceNumber: number;
 
   @Column({ type: "boolean", default: false })
-  admin: boolean;
+  siteAdmin: boolean;
 
   @CreateDateColumn({ type: "timestamp with time zone" })
   createdAt: Date;
