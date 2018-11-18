@@ -4,7 +4,7 @@ import createRedisStore from "connect-redis";
 import { importSchema } from "graphql-import";
 import { GraphQLServer } from "graphql-yoga";
 import "reflect-metadata";
-import { createConnection } from "typeorm";
+import { createConnection, getConnection } from "typeorm";
 import config from "./config";
 import { Job } from "./entity/Job";
 import { JobApplication } from "./entity/JobApplication";
@@ -17,14 +17,14 @@ import { JobRepository } from "./repository/JobRepository";
 import { OrganizationRepository } from "./repository/OrganizationRepository";
 import { UserRepository } from "./repository/UserRepository";
 import client from "./lib/redis";
-import { Init1542578388222 } from "./migration/1542578388222-Init";
+import { Init1542579415045 } from "./migration/1542579415045-Init";
 
 //TODO environment variable for logging (e.g. NODE_ENV)
 createConnection({
   type: "postgres",
   url: config.get("database_url"),
   entities: [Job, Organization, User, Role, JobApplication],
-  migrations: [Init1542578388222],
+  migrations: [Init1542579415045],
   logging: true
 }).then(async connection => {
   await connection.runMigrations({ transaction: true });
@@ -83,7 +83,7 @@ createConnection({
         input: {
           title: exampleJobs[i],
           organization: orgs[i].id,
-          description: "",
+          description: "This is Job " + (i + 1),
           start: new Date(),
           salary: 10
         }
@@ -108,6 +108,12 @@ createConnection({
     employee.phone = "+41 987 654 76 76";
 
     await connection.getRepository(User).save(employee);
+
+    await connection
+      .createQueryBuilder()
+      .relation(User, "employer")
+      .of(employee.id)
+      .add(orgs[1]);
   }
 
   // @ts-ignore

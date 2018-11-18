@@ -12,6 +12,7 @@ import {
 } from "typeorm";
 import { Job } from "./Job";
 import { JobApplication } from "./JobApplication";
+import { Organization } from "./Organization";
 
 @Entity("users")
 export class User {
@@ -57,4 +58,7 @@ export class User {
 
   @OneToMany(type => JobApplication, application => application.user)
   applications: Promise<JobApplication[]>;
+
+  @ManyToMany(type => Organization, organisation => organisation.employee)
+  employer: Promise<Organization[]>;
 }

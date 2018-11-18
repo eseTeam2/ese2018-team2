@@ -5,6 +5,7 @@ type User {
   lastname: String!
   phone: String
   bookmarkedJobs: [Job]!
+  employer: [Organization]
   siteAdmin: Boolean!
 }
 
@@ -12,6 +13,7 @@ type Organization {
   id: ID!
   name: String!
   jobs: [Job]!
+  employees: [User]!
 }
 
 type Job {
