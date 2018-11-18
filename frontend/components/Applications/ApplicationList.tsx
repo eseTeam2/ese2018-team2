@@ -1,7 +1,7 @@
 import {ApolloError} from "apollo-boost";
 import gql from "graphql-tag";
 import {Query} from "react-apollo";
-import {Card, Item, Dimmer, Header, Loader, Container, Segment} from "semantic-ui-react";
+import {Card, Header, Item, Segment} from "semantic-ui-react";
 import * as React from "react";
 import ApplicationItem from "./ApplicationItem";
 

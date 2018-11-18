@@ -1,5 +1,5 @@
 import * as React from "react";
-import {Button, Card, Grid, Icon} from "semantic-ui-react";
+import {Button, Card, Grid} from "semantic-ui-react";
 import Link from "next/link";
 
 interface Application {
@@ -30,7 +30,7 @@ const ApplicationItem: React.SFC<Application> = ({application}) => (
                     <Grid.Column><Card.Description>State change date to implement on DB</Card.Description></Grid.Column>
                     <Grid.Column>
                         <Card.Description>
-                            <Link href={{ pathname: "/jobs/detail", query: { id: application.job.id } }}>
+                            <Link href={{ pathname: "/applications/detail", query: { id: application.id } }}>
                                 <Button as="a" compact icon={"right arrow"} floated={"right"} size="huge"/>
                             </Link>
                             Button should route to Application details
