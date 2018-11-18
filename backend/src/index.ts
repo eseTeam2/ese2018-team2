@@ -4,7 +4,7 @@ import createRedisStore from "connect-redis";
 import { importSchema } from "graphql-import";
 import { GraphQLServer } from "graphql-yoga";
 import "reflect-metadata";
-import { createConnection, getConnection } from "typeorm";
+import { createConnection } from "typeorm";
 import config from "./config";
 import { Job } from "./entity/Job";
 import { JobApplication } from "./entity/JobApplication";
@@ -17,14 +17,15 @@ import { JobRepository } from "./repository/JobRepository";
 import { OrganizationRepository } from "./repository/OrganizationRepository";
 import { UserRepository } from "./repository/UserRepository";
 import client from "./lib/redis";
-import { Init1542579415045 } from "./migration/1542579415045-Init";
+import { RoleRepository } from "./repository/RoleRepository";
+import { Init1542584964888 } from "./migration/1542584964888-Init";
 
 //TODO environment variable for logging (e.g. NODE_ENV)
 createConnection({
   type: "postgres",
   url: config.get("database_url"),
   entities: [Job, Organization, User, Role, JobApplication],
-  migrations: [Init1542579415045],
+  migrations: [Init1542584964888],
   logging: true
 }).then(async connection => {
   await connection.runMigrations({ transaction: true });
@@ -34,6 +35,7 @@ createConnection({
   const organizationRepository = new OrganizationRepository(connection);
   const userRepository = new UserRepository(connection);
   const applicationRepository = new JobApplicationRepository(connection);
+  const roleRepository = new RoleRepository(connection);
 
   const adminAvailable =
     (await connection.getRepository(User).find({ email: "admin@example.com" }))
@@ -109,11 +111,39 @@ createConnection({
 
     await connection.getRepository(User).save(employee);
 
+    const student = new User();
+    student.email = "student@example.com";
+    student.firstname = "Kim";
+    student.lastname = "Possible";
+    student.password = bcrypt.hashSync("123456", bcrypt.genSaltSync(10));
+    student.phone = "+41 195 321 99 99";
+
+    await connection.getRepository(User).save(student);
+
     await connection
       .createQueryBuilder()
       .relation(User, "employer")
       .of(employee.id)
       .add(orgs[1]);
+
+    const exampleRoles = ["Role 1", "Role 2", "Role 3"];
+    const roles = [];
+
+    for (let i = 0; i < exampleOrgs.length; i++) {
+      const role = await roleRepository.createRole({
+        title: exampleRoles[i],
+        description: "This is " + exampleRoles[i]
+      });
+      roles.push(role);
+    }
+
+    for (let i = 0; i < roles.length; i++) {
+      await connection
+        .createQueryBuilder()
+        .relation(User, "roles")
+        .of(student.id)
+        .add(roles[i]);
+    }
   }
 
   // @ts-ignore
@@ -122,6 +152,7 @@ createConnection({
     organizationRepository,
     userRepository,
     applicationRepository,
+    roleRepository,
     session: request.session
   });
 
