@@ -6,6 +6,7 @@ import {withRouter, SingletonRouter} from "next/router";
 import Link from "next/link";
 import BackButton from "../Utils/BackButton";
 
+
 interface LoginComponentProps {
     loading?: boolean;
     handleSubmit?: (email: string, password: string) => Promise<boolean>;
