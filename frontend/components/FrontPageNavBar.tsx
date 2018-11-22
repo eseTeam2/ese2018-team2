@@ -20,7 +20,7 @@ class FrontPageNavBar extends React.Component<FrontPageNavBarProps, FrontPageNav
     render() {
         const {activeItem} = this.state;
 
-        const countryOptions = [
+        const languageOptions = [
             {key: 'gb', value: 'gb', flag: 'gb', text: 'English'},
             {key: 'ch', value: 'ch', flag: 'ch', text: 'Deutsch'},
             {key: 'fr', value: 'fr', flag: 'fr', text: 'Français'},
@@ -28,22 +28,20 @@ class FrontPageNavBar extends React.Component<FrontPageNavBarProps, FrontPageNav
         ];
         return (
             <React.Fragment>
-                <Grid centered columns={2}>
+                <Grid columns={2}>
                     <Grid.Column>
                         <Grid columns={2}>
                             <Grid.Column>
-                                <Container textAlign={'center'}>
-                                    <Link>
-                                        <img src={"../static/logo_04.png"}/>
+                                    <Link href={"http://www.helargehadroncolliderdestroyedtheworldyet.com"}>
+                                        <Image centered src={"../static/logo_04.png"}/>
                                     </Link>
-                                </Container>
                             </Grid.Column>
                         </Grid>
                     </Grid.Column>
                     <Grid.Column>
                         <Menu secondary fluid stackable text>
                             <Menu.Menu position={"right"}>
-                                <Select placeholder='Select Language' options={countryOptions}/>
+                                <Select defaultValue={languageOptions[0].text} options={languageOptions}/>
                                 <Menu.Item>
                                     <Button>Log in</Button>
                                 </Menu.Item>
@@ -54,7 +52,7 @@ class FrontPageNavBar extends React.Component<FrontPageNavBarProps, FrontPageNav
                         </Menu>
                     </Grid.Column>
                 </Grid>
-                <Container centered>
+                <Container>
                     <Menu pointing secondary widths={2}>
                         <Menu.Item
                             name='students'
