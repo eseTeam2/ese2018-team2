@@ -1,4 +1,4 @@
-import FrontPage from "../components/FrontPage/FrontPage";
 import * as React from "react";
+import BuisnessFrontPage from "../components/FrontPage/BuisnessFrontPage";
 
-export default () => <FrontPage />;
+export default () => <BuisnessFrontPage />;
