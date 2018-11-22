@@ -1,4 +1,6 @@
 import * as React from "react";
-import BuisnessFrontPage from "../components/FrontPage/BuisnessFrontPage";
+import "semantic-ui-css/semantic.min.css";
 
-export default () => <BuisnessFrontPage />;
+export default () => (
+    <FrontPage/>
+);
