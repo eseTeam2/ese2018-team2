@@ -85,8 +85,11 @@ export class JobRepository {
         .where("job.sequenceNumber < :seq", { seq: sequenceOfBeforeEdge })
         .getCount();
 
+      console.log(howManyJobs);
+
       // calculate the offset, how many rows need to be skipped until amount equals last
-      const offset = allEdgesBefore - last < 0 ? 0 : allEdgesBefore - last;
+      const offset =
+        allEdgesBefore - howManyJobs < 0 ? 0 : allEdgesBefore - howManyJobs;
 
       return this.jobs
         .createQueryBuilder("job")
@@ -113,26 +116,28 @@ export class JobRepository {
       return allEdgesBefore - howManyJobs > 0;
     };
 
-    let nodes: Array<Job> = [];
+    let result: Array<Job> = [];
 
     if (after) {
-      nodes = await getJobsAfter(decodeCursor(after), first);
+      result = await getJobsAfter(decodeCursor(after), first);
     }
 
     if (before) {
-      nodes = await getJobsBefore(decodeCursor(before), last);
+      result = await getJobsBefore(decodeCursor(before), last);
     }
 
     if (!after && !before) {
-      nodes = await this.jobs
+      result = await this.jobs
         .createQueryBuilder("job")
         .limit(first)
         .addOrderBy("job.sequenceNumber")
         .getMany();
     }
 
-    const next = await hasNextPage(nodes[nodes.length - 1].id, first);
-    const previous = await hasPreviousPage(nodes[0].id, first);
+    const next = await hasNextPage(result[result.length - 1].id, first);
+    const previous = await hasPreviousPage(result[0].id, 1);
+
+    const nodes = await this.jobs.findByIds(result.map(e => e.id));
 
     return {
       nodes,
