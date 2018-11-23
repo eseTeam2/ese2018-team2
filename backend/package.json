@@ -22,6 +22,7 @@
     "build": "yarn run schema:generate && tsc",
     "prettier": "prettier --write './**/*.{ts,json,graphql}'",
     "schema:generate": "graphqlgen",
+    "seed": "ts-node dev/demeter/index",
     "test": "jest"
   },
   "devDependencies": {
