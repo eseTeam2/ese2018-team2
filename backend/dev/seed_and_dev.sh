@@ -13,8 +13,14 @@ until psql -H postgres://postgres@localhost:5432/postgres -c "select 1" > /dev/n
   sleep 1
 done
 
+clear
+
 ./node_modules/.bin/ts-node node_modules/.bin/typeorm migration:run;
 
+clear
+
 yarn seed
+
+clear
 
 yarn dev
