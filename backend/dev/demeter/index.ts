@@ -1,10 +1,11 @@
-import { createConnection, Connection } from "typeorm";
 import bcrypt from "bcryptjs";
+import { createConnection } from "typeorm";
 import entity from "../../src/entity";
+import { Organization } from "../../src/entity/Organization";
 import { User } from "../../src/entity/User";
 import users from "./users";
-import { assertWrappingType } from "graphql";
-import { Organization } from "../../src/entity/Organization";
+import { Job } from "../../src/entity/Job";
+import generateTitle from "./rnd/buzz";
 
 (async function() {
   const connection = await createConnection({
@@ -36,6 +37,22 @@ import { Organization } from "../../src/entity/Organization";
     .into(Organization)
     .values(organizationsToInsert)
     .execute();
+
+  const organizations = await connection
+    .getRepository(Organization)
+    .find({ take: organizationsToInsert.length - 2 });
+
+  for (let i = 0; i < 200; i++) {
+    const job = new Job();
+    job.start = new Date();
+    job.title = generateTitle();
+    job.description = "Hello World";
+    job.organization =
+      organizations[Math.floor(Math.random() * organizations.length)];
+    job.salary = Math.random() * 10;
+
+    await connection.getRepository(Job).save(job);
+  }
 
   console.log("Ich habe fertig.");
 
