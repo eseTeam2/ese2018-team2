@@ -46,7 +46,7 @@ import generateTitle from "./rnd/buzz";
     const job = new Job();
     job.start = new Date();
     job.title = generateTitle();
-    job.description = "Hello World";
+    job.description = `Job ${i + 1}`;
     job.organization =
       organizations[Math.floor(Math.random() * organizations.length)];
     job.salary = Math.random() * 10;
