@@ -1,13 +1,23 @@
+import { JobConnection } from "src/types";
 import { Connection, Repository } from "typeorm";
 import { Job } from "../entity/Job";
 import { Organization } from "../entity/Organization";
-import { JobConnection } from "src/types";
 
 export interface JobUpdateArgs {
   id: string;
   title: string;
   description: string;
 }
+
+interface CursorOpts {
+  seq: number;
+  count: number;
+}
+
+const encodeCursor = (options: CursorOpts) =>
+  Buffer.from(JSON.stringify(options)).toString("base64");
+const decodeCursor = (src: string) =>
+  JSON.parse(Buffer.from(src, "base64").toString()) as CursorOpts;
 
 export class JobRepository {
   private connection: Connection;
@@ -21,21 +31,84 @@ export class JobRepository {
   }
 
   // TODO create interface for argument type
-  getJobs(first: number, last: number, after: string, before: string): JobConnection {
-    /*if (args.id) {
-      return this.jobs.findByIds([args.id]);
-    }*/
+  async getJobs(
+    first: number,
+    last: number,
+    after: string,
+    before: string
+  ): Promise<JobConnection> {
+    const defaultLimit = 10;
+    const limit = first ? first : last ? last : defaultLimit;
+
+    const { seq = 0, count = 0 } = after
+      ? decodeCursor(after)
+      : before
+        ? decodeCursor(before)
+        : {};
+
+    console.log(`count: ${count}`);
+
+    const totalCount = await this.jobs.count();
+
+    const nodes = await this.jobs
+      .createQueryBuilder("job")
+      .limit(limit)
+      .addOrderBy("job.sequenceNumber")
+      .where("job.sequenceNumber >= :seq", { seq })
+      .getMany();
+
+    const hasNextPage = totalCount > count + nodes.length;
+    const hasPreviousPage = count - nodes.length >= 0;
+
+    let beforeSeq = 0;
+
+    if (hasPreviousPage) {
+      const r = await this.jobs
+        .createQueryBuilder("job")
+        .offset(limit - 1)
+        .addOrderBy("job.sequenceNumber", "DESC")
+        .where("job.sequenceNumber < :seq", { seq: nodes[0].sequenceNumber })
+        .getMany();
+
+      beforeSeq = r[0].sequenceNumber;
+    }
+
+    let nextSeq = 1;
+
+    if (hasNextPage) {
+      const r = await this.jobs
+        .createQueryBuilder("job")
+        .limit(1)
+        .offset(limit - 1)
+        .addOrderBy("job.sequenceNumber", "ASC")
+        .where("job.sequenceNumber > :seq", {
+          seq: nodes[nodes.length - 1].sequenceNumber
+        })
+        .getMany();
+
+      nextSeq = r[0].sequenceNumber;
+    }
 
     return {
-      nodes: [],
+      nodes,
       pageInfo: {
-        endCursor: null,
-        hasNextPage: false,
-        hasPreviousPage: false,
-        startCursor: null
+        endCursor: hasNextPage
+          ? encodeCursor({
+              seq: nextSeq,
+              count: count + nodes.length
+            })
+          : null,
+        hasNextPage,
+        hasPreviousPage,
+        startCursor: hasPreviousPage
+          ? encodeCursor({
+              seq: beforeSeq,
+              count: count - limit
+            })
+          : null
       },
-      totalCount: 0,
-    }
+      totalCount
+    };
   }
 
   async createJob(args: any): Promise<Job> {
