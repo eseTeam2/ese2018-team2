@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
-import session from "express-session";
 import createRedisStore from "connect-redis";
+import session from "express-session";
 import { importSchema } from "graphql-import";
 import { GraphQLServer } from "graphql-yoga";
 import "reflect-metadata";
@@ -12,13 +12,13 @@ import { Organization } from "./entity/Organization";
 import { Role } from "./entity/Role";
 import { User } from "./entity/User";
 import resolvers from "./graphql";
+import client from "./lib/redis";
+import { Init1542584964888 } from "./migration/1542584964888-Init";
 import { JobApplicationRepository } from "./repository/JobApplicationRepository";
 import { JobRepository } from "./repository/JobRepository";
 import { OrganizationRepository } from "./repository/OrganizationRepository";
-import { UserRepository } from "./repository/UserRepository";
-import client from "./lib/redis";
 import { RoleRepository } from "./repository/RoleRepository";
-import { Init1542584964888 } from "./migration/1542584964888-Init";
+import { UserRepository } from "./repository/UserRepository";
 
 //TODO environment variable for logging (e.g. NODE_ENV)
 createConnection({
@@ -86,5 +86,7 @@ createConnection({
     }
   };
 
-  server.start(opts, () => console.log("Server is running on localhost:4000"));
+  server.start(opts, () =>
+    console.log("Server is running on http://localhost:4000")
+  );
 });
