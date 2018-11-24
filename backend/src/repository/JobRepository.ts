@@ -39,6 +39,8 @@ export class JobRepository {
   ): Promise<JobConnection> {
     first = first || 10;
 
+    const pageSize = first || last || 10;
+
     const getJobsAfter = async (job: string, howManyJobs: number) => {
       if (howManyJobs < 0) {
         throw new Error("first has to be positive");
@@ -113,7 +115,7 @@ export class JobRepository {
         .where("job.sequenceNumber < :seq", { seq: sequenceOfBeforeEdge })
         .getCount();
 
-      return allEdgesBefore - howManyJobs > 0;
+      return allEdgesBefore - howManyJobs >= 0;
     };
 
     let result: Array<Job> = [];
@@ -134,8 +136,8 @@ export class JobRepository {
         .getMany();
     }
 
-    const next = await hasNextPage(result[result.length - 1].id, first);
-    const previous = await hasPreviousPage(result[0].id, 1);
+    const next = await hasNextPage(result[result.length - 1].id, pageSize);
+    const previous = await hasPreviousPage(result[0].id, pageSize);
 
     const nodes = await this.jobs.findByIds(result.map(e => e.id));
 
