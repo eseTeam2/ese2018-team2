@@ -22,7 +22,6 @@ services:
       - xpack.monitoring.enabled=false
       - xpack.security.enabled=false
       - xpack.watcher.enabled=false
-      - ELASTIC_PASSWORD=123456
       - "discovery.type=single-node"
       - TAKE_FILE_OWNERSHIP=true
     ulimits:
@@ -31,7 +30,6 @@ services:
         hard: -1
     ports:
       - 9200:9200
-
 
   kibana:
     image: docker.elastic.co/kibana/kibana:6.5.1
