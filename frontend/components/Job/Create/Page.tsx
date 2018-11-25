@@ -1,7 +1,8 @@
 import React from 'react'
-import {Container, Tab} from 'semantic-ui-react'
-import Editor from "./Editor";
+import {Container} from 'semantic-ui-react'
 import PreviewTemplate from "./PreviewTemplate";
+import NavBar from "../../layout/header/NavBar";
+import CreateEditor from "./CreateEditor";
 
 const panes = [
     {
@@ -14,10 +15,14 @@ const panes = [
     },
 ]
 
-const Page = () => (
-    <Container>
-        <Tab panes={panes}/>
-    </Container>
+const Page = ( ) => (
+    <div>
+        <NavBar />
+        <Container>
+            <CreateEditor/>
+        </Container>
+    </div>
 );
 
-export default Page
+
+export default Page;
