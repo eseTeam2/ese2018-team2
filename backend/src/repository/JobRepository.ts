@@ -211,6 +211,10 @@ export class JobRepository {
 
   async search(minSalary: number, maxSalary: number) {
 
+    await elasticClient.ping({
+      requestTimeout: 30000
+    });
+
     const searchResult = await elasticClient.search({
       index: "jobs",
       body: {
