@@ -17,18 +17,20 @@ const UserDropdownComponent: React.SFC<WithMeProps> = ({ me }) => (
 const UserDropdown = withMe(UserDropdownComponent);
 
 const userItems = [
-  <Menu.Item name={"Jobangebote"} />,
-  <Link href={"/applications"} passHref>
+  <Link href={"/applications"} passHref key={"Jobs"}>
+    <Menu.Item name={"Jobangebote"} />
+  </Link>,
+  <Link href={"/applications"} passHref key={"Applications"}>
     <Menu.Item name={"Bewerbungen"} as={"a"} />
   </Link>,
-  <Link href={"/me"} passHref>
+  <Link href={"/me"} passHref key={"Profile"}>
     <Menu.Item name={"Profil"} />
   </Link>
 ];
 
 const adminItems = [
-  <Menu.Item name={"Offene Jobinserate"} />,
-  <Menu.Item>
+  <Menu.Item name={"Offene Jobinserate"} key={"OpenJobs"} />,
+  <Menu.Item key={"Administer"}>
     <Dropdown text={"Verwalten"}>
       <Dropdown.Menu>
         <Dropdown.Item>Benutzende</Dropdown.Item>
@@ -40,7 +42,7 @@ const adminItems = [
 
 const NavBarComponent: React.SFC<WithMeProps> = ({ me }) => (
   <Menu size="large" stackable borderless>
-    <Menu.Item>
+    <Menu.Item key={"Logo"}>
       <Link href={"/"} passHref>
         <a>
           <Image size={"tiny"} centered src={"/static/logo.png"} />
@@ -52,7 +54,7 @@ const NavBarComponent: React.SFC<WithMeProps> = ({ me }) => (
 
     {me && me.siteAdmin && adminItems}
 
-    <Menu.Item position={"right"}>
+    <Menu.Item position={"right"} key={"Login"}>
       {!me && (
         <Link href={"/login"} passHref>
           <a>
