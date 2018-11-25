@@ -32,7 +32,7 @@ export const withIntialMe = <P extends object>(
       const defaultReturn = { data: { me: null } };
       const {
         data: { me }
-      } = client.query({ query }).catch(() => defaultReturn);
+      } = await client.query({ query }).catch(() => defaultReturn);
 
       return {
         me
@@ -49,8 +49,8 @@ export const withIntialMe = <P extends object>(
  */
 export const withMe = graphql<WithMeProps>(query, {
   //@ts-ignore
-  props: ({ data }) => ({
+  props: ({ data, error }) => ({
     //@ts-ignore
-    me: data.me
+    me: !error && data.me
   })
 });
