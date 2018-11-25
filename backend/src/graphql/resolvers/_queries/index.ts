@@ -5,6 +5,7 @@ import organizations from "./organizations";
 import applications from "./applications";
 import roles from "./roles";
 import users from "./users";
+import search from "./search";
 
 export const Query: QueryResolvers.Type = {
   jobs,
@@ -12,7 +13,8 @@ export const Query: QueryResolvers.Type = {
   organizations,
   me,
   applications,
-  users
+  users,
+  search
 };
 
 export default Query;

@@ -1,7 +1,9 @@
 import { JobConnection } from "src/types";
-import { Connection, Repository } from "typeorm";
+import { Connection, Repository, Any } from "typeorm";
 import { Job } from "../entity/Job";
 import { Organization } from "../entity/Organization";
+import { elasticClient } from "../lib/elastic";
+import { Role } from "../entity/Role";
 
 export interface JobUpdateArgs {
   id: string;
@@ -205,6 +207,56 @@ export class JobRepository {
     await this.jobs.update({ id }, fieldsToUpdate);
 
     return this.jobs.findOneOrFail(id);
+  }
+
+  async search(minSalary: number, maxSalary: number) {
+
+    const searchResult = await elasticClient.search({
+      index: "jobs",
+      body: {
+        query: {
+          range: {
+            salary: {
+              gte: minSalary,
+              lte: maxSalary
+            }
+          }
+        },
+        aggs: {
+          Job: {
+            terms: {
+              field: "roles"
+            }
+          }
+        }
+      }
+    });
+
+    const ids = searchResult.hits.hits.map((e) => e._id)
+    const nodes = await this.jobs.findByIds(ids)
+
+    const todo = searchResult.aggregations["Job"].buckets.map((e:any) => ({key: parseInt(e.key), count: e.doc_count}))
+    console.log(todo)
+
+    const roles = await this.connection.getRepository(Role).find()
+
+    // THIS IS EVIL >:D
+    const buckets = todo.map(async (bucket:any) => {
+
+      const role = (await this.connection.getRepository(Role).find({ sequenceNumber: bucket.key }))[0]
+      
+      return {
+        role,
+        count: bucket.count
+      }
+    });
+
+    console.log(`Buckets: ${JSON.stringify(buckets)}`)
+
+    return {
+      nodes,
+      buckets
+    }
   }
 }
 

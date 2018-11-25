@@ -64,6 +64,16 @@ input CreateJobInput {
   organization: ID!
 }
 
+type AggregationBucket {
+  role: Role!
+  count: Int!
+}
+
+type SearchConnection {
+  nodes: [Job!]!
+  buckets: [AggregationBucket!]!
+}
+
 type Mutation {
   login(email: String!, pw: String!): Boolean!
   logout: Boolean!
@@ -100,4 +110,6 @@ type Query {
 
   # Only *site admins* can access this field. 
   users(onlyAdmins: Boolean, id: String): [User!]!
+  search(minSalary: Float, maxSalary: Float): SearchConnection!
+
 }
