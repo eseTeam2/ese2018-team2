@@ -114,9 +114,10 @@ const LOGIN = gql`
 
 interface LoginProps {
   router?: SingletonRouter;
+  handleSuccess?: () => Promise<void>;
 }
 
-const Login: React.SFC<LoginProps> = ({ router }) => (
+const Login: React.SFC<LoginProps> = ({ router, handleSuccess }) => (
   <Mutation mutation={LOGIN}>
     {(login, { loading }) => (
       <LoginComponent
@@ -129,11 +130,17 @@ const Login: React.SFC<LoginProps> = ({ router }) => (
           return !result.data.login;
         }}
         handleSuccess={async () => {
-          window.location.reload(true);
+          await handleSuccess();
         }}
       />
     )}
   </Mutation>
 );
+
+Login.defaultProps = {
+  handleSuccess: async () => {
+    window.location.reload(true);
+  }
+};
 
 export default withRouter(Login);
