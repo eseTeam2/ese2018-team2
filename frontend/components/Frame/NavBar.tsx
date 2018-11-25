@@ -5,7 +5,9 @@ import { withMe, WithMeProps } from "../../lib/withMe";
 const UserDropdownComponent: React.SFC<WithMeProps> = ({ me }) => (
   <Dropdown item text={`${me.firstname} ${me.lastname}`}>
     <Dropdown.Menu>
-      <Dropdown.Item>Profil</Dropdown.Item>
+      <Link href={"/me"} passHref>
+        <Dropdown.Item content={"Profil"} as={"a"} />
+      </Link>
       <Dropdown.Item>Logout</Dropdown.Item>
     </Dropdown.Menu>
   </Dropdown>
@@ -16,7 +18,9 @@ const UserDropdown = withMe(UserDropdownComponent);
 const userItems = [
   <Menu.Item name={"Jobangebote"} />,
   <Menu.Item name={"Bewerbungen"} />,
-  <Menu.Item name={"Profil"} />
+  <Link href={"/me"} passHref>
+    <Menu.Item name={"Profil"} />
+  </Link>
 ];
 
 const adminItems = [
@@ -48,12 +52,9 @@ const NavBarComponent: React.SFC<WithMeProps> = ({ me }) => (
     <Menu.Item position={"right"}>
       {!me && (
         <Link href={"/login"} passHref>
-          <Button
-            basic
-            color={"green"}
-            content={"Login / Registrieren"}
-            as={"a"}
-          />
+          <a>
+            <Button basic color={"green"} content={"Login / Registrieren"} />
+          </a>
         </Link>
       )}
       {me && <UserDropdown />}
