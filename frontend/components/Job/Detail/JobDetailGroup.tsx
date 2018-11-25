@@ -1,31 +1,26 @@
-import { ApolloError } from "apollo-boost";
+import {ApolloError} from "apollo-boost";
 import gql from "graphql-tag";
-import { Query } from "react-apollo";
-import { Container, Dimmer, Header, Loader, Segment } from "semantic-ui-react";
-import JobForm from "./JobForm";
+import {Query} from "react-apollo";
+import {Container, Dimmer, Loader} from "semantic-ui-react";
 import * as React from "react";
+import JobDetails from "./JobDetails";
 
 interface JobDetailGroupComponentProps {
-  loading: boolean;
-  error: ApolloError;
-  data: GetJobsWithDetails;
+    loading: boolean;
+    error: ApolloError;
+    data: GetJobsWithDetails;
 }
 
-export const JobDetailGroupComponent: React.SFC<
-  JobDetailGroupComponentProps
-> = ({ loading, error, data }) => (
-  <Container text>
-    {error && <p>{error.message}</p>}
-    <Dimmer.Dimmable dimmed={loading}>
-      <Dimmer active={loading}>
-        <Loader active={loading} />
-      </Dimmer>
-      <Header block attached="top">
-        {!loading && data.jobs[0].title}
-      </Header>
-      <Segment attached>{!loading && <JobForm data={data.jobs[0]} />}</Segment>
-    </Dimmer.Dimmable>
-  </Container>
+export const JobDetailGroupComponent: React.SFC<JobDetailGroupComponentProps> = ({loading, error, data}) => (
+    <Container>
+        {error && <p>{error.message}</p>}
+        <Dimmer.Dimmable dimmed={loading}>
+            <Dimmer active={loading}>
+                <Loader active={loading}/>
+            </Dimmer>
+            {!loading && <JobDetails job={data.jobs[0]} loading={false}/>}
+        </Dimmer.Dimmable>
+    </Container>
 );
 
 export const GET_JOB_WITH_DETAILS = gql`
@@ -34,34 +29,48 @@ export const GET_JOB_WITH_DETAILS = gql`
       id
       title
       description
+      organization{
+        id
+        name
+      }
     }
   }
 `;
 
 interface GetJobsWithDetails {
-  jobs: {
-    id: string;
-    title: string;
-    description: string;
-  }[];
+    jobs: {
+        id: string;
+        title: string;
+        description: string;
+        organization: {
+            id: string;
+            name: string;
+        }
+    }[];
 }
 
 interface JobDetailGroupProps {
-  job: string;
+    job: string;
 }
 
-const JobDetailGroup: React.SFC<JobDetailGroupProps> = ({ job }) => {
-  return (
-    <Query query={GET_JOB_WITH_DETAILS} variables={{ id: job }} ssr>
-      {({ loading, error, data }) => (
-        <JobDetailGroupComponent
-          loading={loading}
-          error={error}
-          data={data as GetJobsWithDetails}
-        />
-      )}
-    </Query>
-  );
+const JobDetailGroup: React.SFC<JobDetailGroupProps> = ({job}) => {
+    return (
+        <Query query={GET_JOB_WITH_DETAILS} variables={{id: job}} ssr>
+            {({loading, error, data}) => {
+                if (loading) return "Loading...";
+                if (error) return `Error! ${error.message}`;
+
+                return (
+                    <JobDetailGroupComponent
+                        loading={loading}
+                        error={error}
+                        data={data as GetJobsWithDetails}
+                    />
+                );
+            }
+            }
+        </Query>
+    );
 };
 
 export default JobDetailGroup;
