@@ -18,7 +18,9 @@ const UserDropdown = withMe(UserDropdownComponent);
 
 const userItems = [
   <Menu.Item name={"Jobangebote"} />,
-  <Menu.Item name={"Bewerbungen"} />,
+  <Link href={"/applications"} passHref>
+    <Menu.Item name={"Bewerbungen"} as={"a"} />
+  </Link>,
   <Link href={"/me"} passHref>
     <Menu.Item name={"Profil"} />
   </Link>

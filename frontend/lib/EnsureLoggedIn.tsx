@@ -5,7 +5,6 @@ import { Query } from "react-apollo";
 
 // @ts-ignore
 const EnsureLoggedIn: React.SFC<WithMeProps> = ({ me, children }) => {
-  console.log(me);
   if (me) {
     return children;
   }
