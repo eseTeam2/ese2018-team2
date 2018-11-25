@@ -1,18 +1,19 @@
 import React from "react";
+import "semantic-ui-css/semantic.min.css";
+import { Grid, Image } from "semantic-ui-react";
 import Login from "../components/Auth/Login";
-import {Image, Grid} from "semantic-ui-react";
 
 export default () => (
-    <React.Fragment>
+  <React.Fragment>
+    <Grid columns={2}>
+      <Grid.Column>
         <Grid columns={2}>
-            <Grid.Column>
-                <Grid columns={2}>
-                    <Grid.Column>
-                        <Image centered src={"../static/logo_04.png"}/>
-                    </Grid.Column>
-                </Grid>
-            </Grid.Column>
+          <Grid.Column>
+            <Image centered src={"../static/logo_04.png"} />
+          </Grid.Column>
         </Grid>
-        <Login/>
-    </React.Fragment>
-)
+      </Grid.Column>
+    </Grid>
+    <Login />
+  </React.Fragment>
+);
