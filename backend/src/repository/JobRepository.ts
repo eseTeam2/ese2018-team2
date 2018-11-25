@@ -39,7 +39,7 @@ export class JobRepository {
   ): Promise<JobConnection> {
     first = first || 10;
 
-    const pageSize = first || last || 10;
+    const pageSize = first || last || 10;
 
     const getJobsAfter = async (job: string, howManyJobs: number) => {
       if (howManyJobs < 0) {
@@ -119,6 +119,22 @@ export class JobRepository {
     };
 
     let result: Array<Job> = [];
+
+    // check if cursor exists
+    if (
+      (await this.jobs.findByIds([decodeCursor(after || before)])).length === 0
+    ) {
+      return {
+        nodes: result,
+        pageInfo: {
+          endCursor: null,
+          hasNextPage: false,
+          hasPreviousPage: false,
+          startCursor: null
+        },
+        totalCount: await this.jobs.count()
+      };
+    }
 
     if (after) {
       result = await getJobsAfter(decodeCursor(after), first);
