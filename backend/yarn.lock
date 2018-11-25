@@ -87,6 +87,11 @@
   dependencies:
     "@types/express" "*"
 
+"@types/elasticsearch@^5.0.28":
+  version "5.0.28"
+  resolved "https://registry.yarnpkg.com/@types/elasticsearch/-/elasticsearch-5.0.28.tgz#0e4cdf7d9c9a3fe901c0da4fb9ad824c6d3b4091"
+  integrity sha512-hM9Rs1trCkthBz1z9UwAJKQ4/ZaNnKbKB2Utf4iuY91OssLMUHzXZP8mBrkUif4kp/bNOPt6w92L9YmL2nSMuA==
+
 "@types/events@*":
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@types/events/-/events-1.2.0.tgz#81a6731ce4df43619e5c8c945383b3e62a89ea86"

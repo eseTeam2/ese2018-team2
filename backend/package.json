@@ -30,6 +30,7 @@
     "@types/bcryptjs": "^2.4.2",
     "@types/connect-redis": "^0.0.7",
     "@types/convict": "^4.2.0",
+    "@types/elasticsearch": "^5.0.28",
     "@types/express-session": "^1.15.11",
     "@types/jest": "^23.3.8",
     "@types/redis": "^2.8.7",
