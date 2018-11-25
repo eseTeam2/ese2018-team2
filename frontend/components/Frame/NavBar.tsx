@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button, Dropdown, Image, Menu } from "semantic-ui-react";
 import { withMe, WithMeProps } from "../../lib/withMe";
+import LogoutDropdownItem from "./LogoutDropdownItem";
 
 const UserDropdownComponent: React.SFC<WithMeProps> = ({ me }) => (
   <Dropdown item text={`${me.firstname} ${me.lastname}`}>
@@ -8,7 +9,7 @@ const UserDropdownComponent: React.SFC<WithMeProps> = ({ me }) => (
       <Link href={"/me"} passHref>
         <Dropdown.Item content={"Profil"} as={"a"} />
       </Link>
-      <Dropdown.Item>Logout</Dropdown.Item>
+      <LogoutDropdownItem />
     </Dropdown.Menu>
   </Dropdown>
 );

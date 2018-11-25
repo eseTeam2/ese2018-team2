@@ -7,7 +7,7 @@ export interface WithMeProps {
   me?: { id: string; firstname: string; lastname: string; siteAdmin: boolean };
 }
 
-const WithMeQuery = gql`
+export const WithMeQuery = gql`
   query WithMe {
     me {
       id
