@@ -1,13 +1,13 @@
 import * as React from "react";
 import { Container } from "semantic-ui-react";
 import NavBar from "../../layout/header/NavBar";
-import JobDetailGroupComponent from "./JobDetailGroup";
+import JobDetailGroup from "./JobDetailGroup";
 
 const Page = ({ job }) => (
   <div>
     <NavBar />
     <Container>
-      <JobDetailGroupComponent job={job} />
+      <JobDetailGroup job={job} />
     </Container>
   </div>
 );
