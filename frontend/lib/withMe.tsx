@@ -1,18 +1,19 @@
-import * as React from "react";
 import gql from "graphql-tag";
 import { NextContext } from "next";
-import { graphql, ApolloConsumer } from "react-apollo";
+import * as React from "react";
+import { graphql } from "react-apollo";
 
 export interface WithMeProps {
-  me?: { id: string; firstname: string; lastname: string };
+  me?: { id: string; firstname: string; lastname: string; siteAdmin: boolean };
 }
 
-const query = gql`
+const WithMeQuery = gql`
   query WithMe {
     me {
       id
       firstname
       lastname
+      siteAdmin
     }
   }
 `;
@@ -32,7 +33,7 @@ export const withIntialMe = <P extends object>(
       const defaultReturn = { data: { me: null } };
       const {
         data: { me }
-      } = await client.query({ query }).catch(() => defaultReturn);
+      } = await client.query({ query: WithMeQuery }).catch(() => defaultReturn);
 
       return {
         me
@@ -47,7 +48,7 @@ export const withIntialMe = <P extends object>(
 /**
  * Useful HOC to get current user.
  */
-export const withMe = graphql<WithMeProps>(query, {
+export const withMe = graphql<WithMeProps>(WithMeQuery, {
   //@ts-ignore
   props: ({ data, error }) => ({
     //@ts-ignore
