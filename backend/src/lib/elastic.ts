@@ -1,11 +1,10 @@
 import { Client } from "elasticsearch";
-import { Job } from "../entity/Job";
 import { Connection } from "typeorm";
-import { assertWrappingType } from "graphql";
-import { Role } from "../entity/Role";
+import config from "../config";
+import { Job } from "../entity/Job";
 
 export const elasticClient = new Client({
-  host: "localhost:9200",
+  host: config.get("elasticsearch_url"),
   log: "trace"
 });
 

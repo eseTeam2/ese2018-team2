@@ -28,7 +28,6 @@ services:
         hard: -1
     ports:
       - 9200:9200
-
   kibana:
     image: docker.elastic.co/kibana/kibana:6.5.1
     container_name: kibana
@@ -49,6 +48,7 @@ services:
     environment:
       - DATABASE_URL=postgres://postgres@postgres/postgres
       - REDIS_URL=redis://redis:6379
+      - ELASTICSEARCH_URL=elastic:9200
   frontend:
     container_name: "Frontend"
     links:
