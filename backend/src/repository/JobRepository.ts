@@ -1,9 +1,10 @@
 import { JobConnection } from "src/types";
-import { Connection, Repository, Any } from "typeorm";
+import { Connection, Repository, Any, createQueryBuilder } from "typeorm";
 import { Job } from "../entity/Job";
 import { Organization } from "../entity/Organization";
 import { elasticClient } from "../lib/elastic";
 import { Role } from "../entity/Role";
+import { createRangeFilter, createQuery } from "./searchFilters";
 
 export interface JobUpdateArgs {
   id: string;
@@ -124,7 +125,8 @@ export class JobRepository {
 
     // check if cursor exists
     if (
-      (before || after) && (await this.jobs.findByIds([decodeCursor(after || before)])).length === 0
+      (before || after) &&
+      (await this.jobs.findByIds([decodeCursor(after || before)])).length === 0
     ) {
       return {
         nodes: result,
@@ -210,22 +212,18 @@ export class JobRepository {
   }
 
   async search(minSalary: number, maxSalary: number) {
-
     await elasticClient.ping({
       requestTimeout: 30000
     });
 
+    const salaryRange = createRangeFilter("salary", minSalary, maxSalary);
+
+    const query = createQuery([salaryRange])
+
     const searchResult = await elasticClient.search({
       index: "jobs",
       body: {
-        query: {
-          range: {
-            salary: {
-              gte: minSalary,
-              lte: maxSalary
-            }
-          }
-        },
+        ...query,
         aggs: {
           Job: {
             terms: {
@@ -236,31 +234,35 @@ export class JobRepository {
       }
     });
 
-    const ids = searchResult.hits.hits.map((e) => e._id)
-    const nodes = await this.jobs.findByIds(ids)
+    const ids = searchResult.hits.hits.map(e => e._id);
+    const nodes = await this.jobs.findByIds(ids);
 
-    const todo = searchResult.aggregations["Job"].buckets.map((e:any) => ({key: parseInt(e.key), count: e.doc_count}))
-    console.log(todo)
+    const todo = searchResult.aggregations["Job"].buckets.map((e: any) => ({
+      key: parseInt(e.key),
+      count: e.doc_count
+    }));
+    console.log(todo);
 
-    const roles = await this.connection.getRepository(Role).find()
+    const roles = await this.connection.getRepository(Role).find();
 
     // THIS IS EVIL >:D
-    const buckets = todo.map(async (bucket:any) => {
+    const buckets = todo.map(async (bucket: any) => {
+      const role = (await this.connection
+        .getRepository(Role)
+        .find({ sequenceNumber: bucket.key }))[0];
 
-      const role = (await this.connection.getRepository(Role).find({ sequenceNumber: bucket.key }))[0]
-      
       return {
         role,
         count: bucket.count
-      }
+      };
     });
 
-    console.log(`Buckets: ${JSON.stringify(buckets)}`)
+    console.log(`Buckets: ${JSON.stringify(buckets)}`);
 
     return {
       nodes,
       buckets
-    }
+    };
   }
 }
 
