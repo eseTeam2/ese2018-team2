@@ -13,14 +13,16 @@ const APPLY = gql`
 
 interface ApplyButtonProps {
     jobId: String;
+    disabled: boolean;
     router?: SingletonRouter;
 }
 
-const ApplyButton: React.SFC<ApplyButtonProps> = ({jobId, router}) => (
+const ApplyButton: React.SFC<ApplyButtonProps> = ({jobId, disabled, router}) => (
     <Mutation mutation={APPLY}>
         {(apply, _) => (
             <Button floated="right"
                     icon
+                    disabled={disabled}
                     labelPosition='right'
                     color={"green"}
                     onClick={async (e) => {

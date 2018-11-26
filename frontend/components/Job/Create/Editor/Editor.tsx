@@ -1,4 +1,4 @@
-import {Button, Container, Dropdown, Form, Header, Icon, Segment} from "semantic-ui-react";
+import {Button, Container, Dropdown, Form, Grid, Header, Icon, Segment} from "semantic-ui-react";
 import * as React from "react";
 import {Mutation} from "react-apollo";
 import gql from "graphql-tag";
@@ -56,7 +56,7 @@ class CreateEditorComponent extends React.Component<CreateEditorComponentProps> 
         description: "",
         organization: {
             name: "",
-            id:""
+            id: ""
         },
         skills: []
     };
@@ -68,99 +68,105 @@ class CreateEditorComponent extends React.Component<CreateEditorComponentProps> 
 
     render() {
         return (
-            <Container>
-                <Segment attached={"top"}>
-                    <Header as={"h1"}>Create your Job offer</Header>
-                    <Form onSubmit={this.handleSubmit} loading={this.props.loading}>
-                        <Segment vertical>
-                            <Header as={"h3"}>Job Title</Header>
-
-                            <Form.TextArea
-                                name={"title"}
-                                rows={1}
-                                placeholder='Try adding multiple lines'
-                                onChange={(e, data) => (this.setState({title: data.value}))}
-                            />
-                        </Segment>
-                        <Segment vertical>
-                            <Header as={"h3"}>Organization</Header>
-                            <Form.Field name={"organization"}>
-                                <OrganizationSelect handleChange={(e, data) => {
-                                    this.setState({
-                                        organization: {
-                                            name: data.options.filter(org => org.key == data.value)[0].text,
-                                            id: data.options.filter(org => org.key == data.value)[0].key
+            <Segment>
+                <Form onSubmit={this.handleSubmit} loading={this.props.loading}>
+                    <Grid columns={2}>
+                        <Grid.Column>
+                            <Segment secondary>
+                                <Header as={"h1"}>Create your Job offer</Header>
+                                <Segment>
+                                    <Segment vertical>
+                                        <Header as={"h3"}>Job Title</Header>
+                                        <Form.TextArea
+                                            name={"title"}
+                                            rows={1}
+                                            placeholder='Try adding multiple lines'
+                                            onChange={(e, data) => (this.setState({title: data.value}))}
+                                        />
+                                    </Segment>
+                                    <Segment vertical>
+                                        <Header as={"h3"}>Organization</Header>
+                                        <Form.Field name={"organization"}>
+                                            <OrganizationSelect handleChange={(e, data) => {
+                                                this.setState({
+                                                    organization: {
+                                                        name: data.options.filter(org => org.key == data.value)[0].text,
+                                                        id: data.options.filter(org => org.key == data.value)[0].key
+                                                    }
+                                                });
+                                            }}/>
+                                        </Form.Field>
+                                    </Segment>
+                                    <Segment vertical>
+                                        <Header as={"h3"}>Description</Header>
+                                        <Form.TextArea name={"description"}
+                                                       autoHeight
+                                                       placeholder='Try adding multiple lines'
+                                                       onChange={(e, data) => (this.setState({description: data.value}))}
+                                        />
+                                    </Segment>
+                                    <Segment vertical>
+                                        <Header as={"h3"}>Requested Skills</Header>
+                                        <Dropdown
+                                            multiple
+                                            search
+                                            selection
+                                            fluid
+                                            options={skillOptions}
+                                            placeholder='Choose skills'
+                                            onChange={(e, data) => {
+                                                const skills = data.value.map((skillIndex) => ({
+                                                    key: skillOptions[skillIndex - 1].key,
+                                                    value: skillOptions[skillIndex - 1].value,
+                                                    text: skillOptions[skillIndex - 1].text,
+                                                }));
+                                                this.setState({...this.state, skills});
+                                            }
+                                            }
+                                        />
+                                    </Segment>
+                                </Segment>
+                            </Segment>
+                        </Grid.Column>
+                        <Grid.Column>
+                            <Segment secondary>
+                                <Header as='h2'>
+                                    <Icon name='eye'/>
+                                    <Header.Content>
+                                        Preview your job insert
+                                    </Header.Content>
+                                </Header>
+                                <JobDetails
+                                    job={
+                                        {
+                                            id: "",
+                                            title: this.state.title,
+                                            description: this.state.description,
+                                            skills: this.state.skills,
+                                            organization: {
+                                                name: this.state.organization.name
+                                            }
                                         }
-                                    });
-                                }}/>
-                            </Form.Field>
-                        </Segment>
-                        <Segment vertical>
-                            <Header as={"h3"}>Description</Header>
-                            <Form.TextArea name={"description"}
-                                           autoHeight
-                                           placeholder='Try adding multiple lines'
-                                           onChange={(e, data) => (this.setState({description: data.value}))}
-                            />
-                        </Segment>
-                        <Segment vertical>
-                            <Header as={"h3"}>Requested Skills</Header>
-                            <Dropdown
-                                multiple
-                                search
-                                selection
-                                fluid
-                                options={skillOptions}
-                                placeholder='Choose skills'
-                                onChange={(e, data) => {
-                                    const skills = data.value.map((skillIndex) => ({
-                                        key: skillOptions[skillIndex - 1].key,
-                                        value: skillOptions[skillIndex - 1].value,
-                                        text: skillOptions[skillIndex - 1].text,
-                                    }));
-                                    this.setState({...this.state, skills});
-                                }
-                                }
-                            />
-                        </Segment>
-                        <Segment basic clearing>
-                            <Button
-                                icon
-                                labelPosition="right"
-                                color={"green"}
-                                type={"submit"}
-                                size="huge"
-                                floated="right">
-                                <Icon name="arrow right"/>
-                                Publish
-                            </Button>
-                        </Segment>
-                    </Form>
-                </Segment>
-                <Segment attached>
-                    <Header as='h2'>
-                        <Icon name='eye'/>
-                        <Header.Content>
-                            Preview your job insert
-                        </Header.Content>
-                    </Header> </Segment>
-                <Segment attached="bottom">
-                    <JobDetails
-                        job={
-                            {
-                                id: "",
-                                title: this.state.title,
-                                description: this.state.description,
-                                skills: this.state.skills,
-                                organization: {
-                                    name: this.state.organization.name
-                                }
-                            }
-                        }
-                        loading={false}
-                    />
-                </Segment>
-            </Container>
+                                    }
+                                    loading={false}
+                                />
+                            </Segment>
+                            <Segment basic clearing>
+                                <Button
+                                    icon
+                                    labelPosition="right"
+                                    color={"green"}
+                                    type={"submit"}
+                                    size="huge"
+                                    floated="right">
+                                    <Icon name="arrow right"/>
+                                    Publish
+                                </Button>
+                            </Segment>
+                        </Grid.Column>
+                    </Grid>
+                </Form>
+            </Segment>
         );
     }
 }

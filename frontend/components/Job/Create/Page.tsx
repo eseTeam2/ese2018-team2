@@ -4,7 +4,7 @@ import NavBar from "../../layout/header/NavBar";
 import Editor from "./Editor/Editor";
 
 const Page = () => (
-    <Container>
+    <Container fluid>
         <NavBar/>
         <Editor/>
     </Container>
