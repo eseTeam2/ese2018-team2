@@ -5,9 +5,12 @@ import {
   Grid,
   Header,
   Icon,
-  Segment
+  Segment,
+  Label
 } from "semantic-ui-react";
 import * as React from "react";
+import { Head } from "next/document";
+import ClickableLabel from "./Search/ClickableLabel";
 
 const skillOptions = [
   { key: "angular", text: "Angular", value: "angular" },
@@ -32,44 +35,24 @@ const skillOptions = [
 
 export default () => (
   <Container>
-    <Segment basic padded="very">
-      <Header as="h1">Find jobs</Header>
+    <Segment basic>
+      <Header as="h2">Suche nach einem Job</Header>
     </Segment>
-    <Grid columns={4}>
-      <Grid.Column>
-        <Dropdown
-          placeholder="Select skills"
-          fluid
-          search
-          selection
-          options={skillOptions}
-        />
-      </Grid.Column>
-      <Grid.Column>
-        <Dropdown
-          placeholder="Select more skills"
-          fluid
-          multiple
-          search
-          selection
-          options={skillOptions}
-        />
-      </Grid.Column>
-      <Grid.Column>
-        <Dropdown
-          placeholder="Select more more skills"
-          fluid
-          search
-          selection
-          options={skillOptions}
-        />
-      </Grid.Column>
-      <Grid.Column textAlign="center">
-        <Button icon labelPosition="right" fluid>
-          Find
-          <Icon name="search" />
-        </Button>
-      </Grid.Column>
-    </Grid>
+    <Segment basic>
+      <Header as={"h3"}>Rollen</Header>
+      <ClickableLabel text={"Test"} detail={10} />
+      <Label>
+        Test
+        <Label.Detail>2</Label.Detail>
+      </Label>
+      <Label>
+        Test
+        <Label.Detail>2</Label.Detail>
+      </Label>
+      <Label>
+        Test
+        <Label.Detail>2</Label.Detail>
+      </Label>
+    </Segment>
   </Container>
 );
