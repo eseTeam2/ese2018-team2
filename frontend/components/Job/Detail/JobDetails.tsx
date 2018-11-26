@@ -1,5 +1,6 @@
 import * as React from "react";
 import {Container, Grid, Header, Image, List, Segment, Table} from "semantic-ui-react";
+import ApplyButton from "../../student/ApplyButton";
 
 interface JobDetailsProps {
     loading: boolean;
@@ -37,7 +38,7 @@ class JobDetails extends React.Component<JobDetailsProps> {
                         <Grid.Column width={11}>
                             <Segment vertical>
                                 <Header as={"h3"}>Description</Header>
-                                <p>{!this.props.loading && this.props.job.description}</p>
+                                <Container fluid>{!this.props.loading && this.props.job.description}</Container>
                             </Segment>
                             <Segment vertical>
                                 <Header as={"h3"}>Required Skills</Header>
@@ -78,6 +79,9 @@ class JobDetails extends React.Component<JobDetailsProps> {
                             </Segment>
                             <Segment vertical>
                                 <Image bordered size="medium" src={"../../static/embedded_map.jpg"}/>
+                            </Segment>
+                            <Segment vertical>
+                                <ApplyButton disabled job="asdfas"/>
                             </Segment>
                         </Grid.Column>
                     </Grid>
