@@ -2,12 +2,12 @@ import gql from "graphql-tag";
 import Router from "next/router";
 import React from "react";
 import { Query } from "react-apollo";
-import { Button, Icon, Segment, Table } from "semantic-ui-react";
+import { Icon, Segment, Table } from "semantic-ui-react";
 import IsDetail from "./IsDetail";
 import OrganizationBreadcrumb from "./OrganizationBreadcrumb";
 
-const query = gql`
-  query GET_ORGANIZATION {
+export const GET_ALL_ORGANIZATIONS = gql`
+  query GetAllOrganizations {
     organizations {
       id
       name
@@ -27,7 +27,7 @@ class Overview extends React.Component<OverviewProps, OverviewState> {
       <IsDetail>
         <React.Fragment>
           <OrganizationBreadcrumb />
-          <Query query={query}>
+          <Query query={GET_ALL_ORGANIZATIONS}>
             {({ loading, error, data }) => (
               <Segment basic loading={loading}>
                 {error && <p>{error.message}</p>}
@@ -37,7 +37,6 @@ class Overview extends React.Component<OverviewProps, OverviewState> {
                       <Table.Row>
                         <Table.HeaderCell>Organization</Table.HeaderCell>
                         <Table.HeaderCell>Email</Table.HeaderCell>
-                        <Table.HeaderCell>Approved</Table.HeaderCell>
                         <Table.HeaderCell>Approved</Table.HeaderCell>
                       </Table.Row>
                     </Table.Header>
@@ -64,18 +63,6 @@ class Overview extends React.Component<OverviewProps, OverviewState> {
                                   color="green"
                                   name="checkmark"
                                   size="large"
-                                />
-                              ) : (
-                                ""
-                              )}
-                            </Table.Cell>
-                            <Table.Cell>
-                              {!organization.approved ? (
-                                <Button
-                                  content={"Approve"}
-                                  color={"green"}
-                                  icon="checkmark"
-                                  labelPosition="right"
                                 />
                               ) : (
                                 ""

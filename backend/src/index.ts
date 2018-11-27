@@ -18,14 +18,14 @@ import { JobRepository } from "./repository/JobRepository";
 import { OrganizationRepository } from "./repository/OrganizationRepository";
 import { RoleRepository } from "./repository/RoleRepository";
 import { UserRepository } from "./repository/UserRepository";
-import {Init1543337251287} from "./migration/1543337251287-Init";
+import {Init1543344036446} from "./migration/1543344036446-Init";
 
 //TODO environment variable for logging (e.g. NODE_ENV)
 createConnection({
   type: "postgres",
   url: config.get("database_url"),
   entities: [Job, Organization, User, Role, JobApplication],
-  migrations: [Init1543337251287],
+  migrations: [Init1543344036446],
   logging: true
 }).then(async connection => {
   await connection.runMigrations({ transaction: true });
