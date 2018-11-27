@@ -48,7 +48,7 @@ class Overview extends React.Component<OverviewProps, OverviewState> {
             <Segment basic loading={loading}>
               {error && <p>{error.message}</p>}
               {!error && (
-                <Table singleLine>
+                <Table singleLine fixed>
                   <Table.Header>
                     <Table.Row>
                       <Table.HeaderCell>Email</Table.HeaderCell>
