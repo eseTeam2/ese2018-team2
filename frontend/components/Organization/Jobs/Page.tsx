@@ -1,16 +1,14 @@
 import React from "react";
-import NavBar from "../../Frame/NavBar";
-import { Segment, Container, Header } from "semantic-ui-react";
+import { Container, Header } from "semantic-ui-react";
 import { withIntialMe } from "../../../lib/withMe";
+import NavBar from "../../Frame/NavBar";
 
 const Page = () => (
   <React.Fragment>
     <NavBar />
-    <Segment basic>
-      <Container>
-        <Header as={"h2"}>XXX</Header>
-      </Container>
-    </Segment>
+    <Container>
+      <Header as={"h2"}>Übersicht Jobinserate</Header>
+    </Container>
   </React.Fragment>
 );
 
