@@ -2,7 +2,7 @@ import { Connection, getConnection, Repository } from "typeorm";
 import bcrypt from "bcryptjs";
 import { User } from "../entity/User";
 import { Job } from "../entity/Job";
-import Utils from "./Utils";
+import Utils, { enforceAdmin } from "./Utils";
 import enforceAuth from "./Utils";
 
 export class UserRepository {
@@ -28,6 +28,11 @@ export class UserRepository {
     session.user = user;
 
     return true;
+  }
+
+  async findUsers(session: Express.Session) {
+    enforceAdmin(session);
+    return this.users.find({ order: { sequenceNumber: "ASC" } });
   }
 
   async getMe(session: Express.Session) {
