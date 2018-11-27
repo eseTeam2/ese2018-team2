@@ -36,7 +36,6 @@ const adminItems = [
         <Link href="/admin/users" passHref>
           <Dropdown.Item as={"a"}>Benutzende</Dropdown.Item>
         </Link>
-
         <Dropdown.Item>Organizationen</Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
@@ -44,9 +43,9 @@ const adminItems = [
 ];
 
 const orgItems = [
-  <Menu.Item name={"Meine Jobinserate"} key={"MyJobs"}>
-    Meine Jobinserate
-  </Menu.Item>
+  <Link href={"/org/jobs"} key={"MyJobs"}>
+    <Menu.Item name={"Meine Jobinserate"}>Meine Jobinserate</Menu.Item>
+  </Link>
 ];
 
 const NavBarComponent: React.SFC<WithMeProps> = ({ me }) => (
