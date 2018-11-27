@@ -3,8 +3,9 @@ import { Button, Container, Segment } from "semantic-ui-react";
 import OrganizationBreadcrumb from "./OrganizationBreadcrumb";
 import { withRouter } from "next/router";
 import gql from "graphql-tag";
-import { GET_ALL_ORGANIZATIONS } from "./Overview";
+import { GET_ALL_ORGANIZATIONS } from "../Overview";
 import { Mutation } from "react-apollo";
+import OrganizationDeleteButton from "./OrganizationDeleteButton";
 
 const APPROVE_ORGANIZATION = gql`
   mutation ApproveOrganization($organizationId: String!) {
@@ -42,6 +43,7 @@ const DetailComponent = ({ router }) => (
         }
       </Container>
     </Segment>
+    <OrganizationDeleteButton organizationId={router.query.detail} />
   </React.Fragment>
 );
 

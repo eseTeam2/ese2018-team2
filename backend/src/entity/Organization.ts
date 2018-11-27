@@ -1,14 +1,14 @@
 import {
     Column,
+    CreateDateColumn,
     Entity,
+    Generated,
+    JoinTable,
+    ManyToMany,
     OneToMany,
     PrimaryGeneratedColumn,
-    CreateDateColumn,
     UpdateDateColumn,
-    VersionColumn,
-    Generated,
-    ManyToMany,
-    JoinTable
+    VersionColumn
 } from "typeorm";
 import {Job} from "./Job";
 import {User} from "./User";
@@ -27,7 +27,7 @@ export class Organization {
     @Column("text")
     phone: string;
 
-    @Column({ type: "boolean", default: false})
+    @Column({type: "boolean", default: false})
     approved: boolean;
 
     @Column("bigint")
@@ -47,6 +47,6 @@ export class Organization {
     @JoinTable({name: "organisation_staff"})
     employee: Promise<User[]>;
 
-    @OneToMany(type => Job, job => job.organization)
+    @OneToMany(type => Job, job => job.organization, {onDelete: "SET NULL", onUpdate:"SET NULL", cascade: true})
     jobs: Promise<Job[]>;
 }

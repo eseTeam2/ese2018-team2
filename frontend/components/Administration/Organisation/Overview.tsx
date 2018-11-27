@@ -4,7 +4,7 @@ import React from "react";
 import { Query } from "react-apollo";
 import { Icon, Segment, Table } from "semantic-ui-react";
 import IsDetail from "./IsDetail";
-import OrganizationBreadcrumb from "./OrganizationBreadcrumb";
+import OrganizationBreadcrumb from "./Detail/OrganizationBreadcrumb";
 
 export const GET_ALL_ORGANIZATIONS = gql`
   query GetAllOrganizations {

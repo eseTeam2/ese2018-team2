@@ -80,6 +80,7 @@ type Mutation {
   rejectJobApplication(applicationId: String!): Boolean!
 
   createOrganization(name: String!): Organization!
+  deleteOrganization(organizationId: String!): Boolean!
   approveOrganization(organizationId: String!): Boolean!
 
   createRole(title: String!, description: String!): Role!

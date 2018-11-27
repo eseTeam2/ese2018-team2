@@ -12,6 +12,7 @@ import approveJobApplication from "./approveJobApplication";
 import rejectJobApplication from "./rejectJobApplication";
 import createRole from "./createRole";
 import approveOrganization from "./approveOrganization";
+import deleteOrganization from "./deleteOrganization";
 
 export const Mutation: MutationResolvers.Type = {
     createJob,
@@ -19,6 +20,7 @@ export const Mutation: MutationResolvers.Type = {
     deleteJob,
     createOrganization,
     approveOrganization,
+    deleteOrganization,
     createRole,
     login,
     logout,
