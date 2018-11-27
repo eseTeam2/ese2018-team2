@@ -28,6 +28,7 @@ const OrganisationOverviewComponent: React.SFC<
     <Segment basic loading={loading}>
       {error && <p>{error.message}</p>}
       {!loading &&
+        !error &&
         data &&
         data.organizations.map(org => <OrganisationContainer org={org} />)}
     </Segment>
