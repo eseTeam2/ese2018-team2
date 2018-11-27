@@ -21,6 +21,15 @@ export class Organization {
   @Column("text", { nullable: false })
   name: string;
 
+  @Column("text", { nullable: false})
+  email: string;
+
+  @Column("text")
+  phone: string;
+
+  @Column("boolean", {default: false})
+  approved: boolean;
+
   @Column("bigint")
   @Generated("increment")
   sequenceNumber: number;

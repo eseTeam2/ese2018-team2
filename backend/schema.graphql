@@ -11,8 +11,11 @@ type User {
 type Organization {
   id: ID!
   name: String!
+  email: String!
+  phone: String
   jobs: [Job]!
   employees: [User]!
+  approved: Boolean!
 }
 
 type Job {
