@@ -1,4 +1,5 @@
 import gql from "graphql-tag";
+import Router from "next/router";
 import React from "react";
 import { Query } from "react-apollo";
 import { Breadcrumb, Icon, Radio, Segment, Table } from "semantic-ui-react";
@@ -48,7 +49,7 @@ class Overview extends React.Component<OverviewProps, OverviewState> {
             <Segment basic loading={loading}>
               {error && <p>{error.message}</p>}
               {!error && (
-                <Table singleLine fixed>
+                <Table singleLine fixed selectable>
                   <Table.Header>
                     <Table.Row>
                       <Table.HeaderCell>Email</Table.HeaderCell>
@@ -58,20 +59,36 @@ class Overview extends React.Component<OverviewProps, OverviewState> {
                     </Table.Row>
                   </Table.Header>
                   <Table.Body>
-                    {data.users.map(user => (
-                      <Table.Row key={user.id}>
-                        <Table.Cell>{user.email}</Table.Cell>
-                        <Table.Cell>{user.firstname}</Table.Cell>
-                        <Table.Cell>{user.lastname}</Table.Cell>
-                        <Table.Cell>
-                          {user.siteAdmin ? (
-                            <Icon color="green" name="checkmark" size="large" />
-                          ) : (
-                            ""
-                          )}
-                        </Table.Cell>
-                      </Table.Row>
-                    ))}
+                    {data.users &&
+                      data.users.map(user => (
+                        <Table.Row
+                          key={user.id}
+                          onClick={async e => {
+                            e.preventDefault();
+                            await Router.push({
+                              pathname: "/admin/users",
+                              query: {
+                                detail: user.id
+                              }
+                            });
+                          }}
+                        >
+                          <Table.Cell>{user.email}</Table.Cell>
+                          <Table.Cell>{user.firstname}</Table.Cell>
+                          <Table.Cell>{user.lastname}</Table.Cell>
+                          <Table.Cell>
+                            {user.siteAdmin ? (
+                              <Icon
+                                color="green"
+                                name="checkmark"
+                                size="large"
+                              />
+                            ) : (
+                              ""
+                            )}
+                          </Table.Cell>
+                        </Table.Row>
+                      ))}
                   </Table.Body>
                 </Table>
               )}
