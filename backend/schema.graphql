@@ -4,9 +4,8 @@ type User {
   firstname: String!
   lastname: String!
   phone: String
-  bookmarkedJobs: [Job]!
-  employer: [Organization]
   siteAdmin: Boolean!
+  hasOrganizations: Boolean!
 }
 
 type Organization {
