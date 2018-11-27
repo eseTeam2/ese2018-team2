@@ -43,6 +43,12 @@ const adminItems = [
   </Menu.Item>
 ];
 
+const orgItems = [
+  <Menu.Item name={"Meine Jobinserate"} key={"MyJobs"}>
+    Meine Jobinserate
+  </Menu.Item>
+];
+
 const NavBarComponent: React.SFC<WithMeProps> = ({ me }) => (
   <Menu size="large" stackable borderless>
     <Menu.Item key={"Logo"}>
@@ -53,9 +59,11 @@ const NavBarComponent: React.SFC<WithMeProps> = ({ me }) => (
       </Link>
     </Menu.Item>
 
-    {me && !me.siteAdmin && userItems}
+    {me && !me.siteAdmin && !me.hasOrganizations && userItems}
 
-    {me && me.siteAdmin && adminItems}
+    {me && me.siteAdmin && !me.hasOrganizations && adminItems}
+
+    {me && me.hasOrganizations && orgItems}
 
     <Menu.Item position={"right"} key={"Login"}>
       {!me && (

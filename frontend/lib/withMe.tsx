@@ -13,6 +13,7 @@ export interface WithMeProps {
     email: string;
     phone: string;
     roles: string;
+    hasOrganizations: string;
   };
 }
 
@@ -25,6 +26,7 @@ export const WithMeQuery = gql`
       siteAdmin
       email
       phone
+      hasOrganizations
     }
   }
 `;
