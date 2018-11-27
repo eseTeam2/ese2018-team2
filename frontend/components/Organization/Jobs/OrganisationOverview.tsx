@@ -27,7 +27,8 @@ const OrganisationOverviewComponent: React.SFC<
     <Header as={"h2"}>Übersicht Jobinserate</Header>
     <Segment basic loading={loading}>
       {error && <p>{error.message}</p>}
-      {data &&
+      {!loading &&
+        data &&
         data.organizations.map(org => <OrganisationContainer org={org} />)}
     </Segment>
   </Container>
