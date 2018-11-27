@@ -12,6 +12,7 @@ import enforceAuth from "./Utils";
 
 export interface FindUserOptions {
   onlyAdmins?: boolean;
+  id?: string;
 }
 
 export class UserRepository {
@@ -39,8 +40,16 @@ export class UserRepository {
     return true;
   }
 
-  async findUsers({ onlyAdmins }: FindUserOptions, session: Express.Session) {
+  async findUsers(
+    { onlyAdmins, id }: FindUserOptions,
+    session: Express.Session
+  ) {
     enforceAdmin(session);
+
+    // search by id
+    if (id) {
+      return this.users.find({ id });
+    }
 
     // TODO won't work for more where
     const whereOnlyAdmins = (

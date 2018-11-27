@@ -94,5 +94,5 @@ type Query {
   roles(id: String, title: String): [Role]!
 
   # Only *site admins* can access this field. 
-  users(onlyAdmins: Boolean): [User!]!
+  users(onlyAdmins: Boolean, id: String): [User!]!
 }
