@@ -2,8 +2,9 @@ import gql from "graphql-tag";
 import Router from "next/router";
 import React from "react";
 import { Query } from "react-apollo";
-import { Breadcrumb, Icon, Radio, Segment, Table } from "semantic-ui-react";
+import { Icon, Radio, Segment, Table } from "semantic-ui-react";
 import IsDetail from "./IsDetail";
+import UserBreadcrumb from "./UserBreadcrumb";
 
 const query = gql`
   query GET_USERS($onlyAdmins: Boolean) {
@@ -35,9 +36,7 @@ class Overview extends React.Component<OverviewProps, OverviewState> {
     return (
       <IsDetail>
         <React.Fragment>
-          <Breadcrumb size="big">
-            <Breadcrumb.Section>Übersicht</Breadcrumb.Section>
-          </Breadcrumb>
+          <UserBreadcrumb />
           <Segment basic>
             <Radio
               toggle
