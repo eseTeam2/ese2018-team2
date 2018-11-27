@@ -2,7 +2,6 @@ import gql from "graphql-tag";
 import { NextContext } from "next";
 import * as React from "react";
 import { graphql } from "react-apollo";
-import { Role } from "../../backend/src/entity/Role";
 
 export interface WithMeProps {
   me?: {
