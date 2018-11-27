@@ -1,10 +1,10 @@
 import { JobConnection } from "src/types";
-import { Connection, Repository, Any, createQueryBuilder } from "typeorm";
+import { Connection, Repository } from "typeorm";
 import { Job } from "../entity/Job";
 import { Organization } from "../entity/Organization";
-import { elasticClient } from "../lib/elastic";
 import { Role } from "../entity/Role";
-import { createRangeFilter, createQuery } from "./searchFilters";
+import { elasticClient } from "../lib/elastic";
+import { createQuery, createRangeFilter } from "./searchFilters";
 
 export interface JobUpdateArgs {
   id: string;
@@ -218,7 +218,7 @@ export class JobRepository {
 
     const salaryRange = createRangeFilter("salary", minSalary, maxSalary);
 
-    const query = createQuery([salaryRange])
+    const query = createQuery([salaryRange]);
 
     const searchResult = await elasticClient.search({
       index: "jobs",
@@ -227,7 +227,10 @@ export class JobRepository {
         aggs: {
           Job: {
             terms: {
-              field: "roles"
+              field: "roles",
+              order: {
+                _key: "asc"
+              }
             }
           }
         }
