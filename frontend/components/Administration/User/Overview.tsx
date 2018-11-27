@@ -5,8 +5,8 @@ import { Query } from "react-apollo";
 import { Breadcrumb, Radio, Segment, Table } from "semantic-ui-react";
 
 const query = gql`
-  query GET_USERS {
-    users {
+  query GET_USERS($onlyAdmins: Boolean) {
+    users(onlyAdmins: $onlyAdmins) {
       id
       email
       firstname
@@ -16,64 +16,68 @@ const query = gql`
   }
 `;
 
-interface User {
-  id: string;
-  email: string;
-  firstname: string;
-  lastname: string;
-  siteAdmin: boolean;
+interface OverviewProps {}
+interface OverviewState {
+  onlyAdmins: boolean;
 }
 
-interface GetUsersData {
-  users: Array<User>;
+class Overview extends React.Component<OverviewProps, OverviewState> {
+  state = {
+    onlyAdmins: false
+  };
+
+  toggleOnlyAdmins = () => {
+    this.setState({ onlyAdmins: !this.state.onlyAdmins });
+  };
+
+  render() {
+    return (
+      <React.Fragment>
+        <Breadcrumb size="big">
+          <Breadcrumb.Section>Übersicht</Breadcrumb.Section>
+        </Breadcrumb>
+        <Segment basic>
+          <Radio
+            toggle
+            checked={this.state.onlyAdmins}
+            label={"Nur Admin"}
+            onChange={this.toggleOnlyAdmins}
+          />
+        </Segment>
+        <Query query={query} variables={{ onlyAdmins: this.state.onlyAdmins }}>
+          {({ loading, error, data }) => (
+            <Segment basic loading={loading}>
+              {error && <p>{error.message}</p>}
+              {!error && (
+                <Table celled>
+                  <Table.Header>
+                    <Table.Row>
+                      <Table.HeaderCell>Email</Table.HeaderCell>
+                      <Table.HeaderCell>Vornamen</Table.HeaderCell>
+                      <Table.HeaderCell>Nachnamen</Table.HeaderCell>
+                      <Table.HeaderCell>Admin</Table.HeaderCell>
+                    </Table.Row>
+                  </Table.Header>
+                  <Table.Body>
+                    {data.users.map(user => (
+                      <Table.Row key={user.id}>
+                        <Table.Cell>{user.email}</Table.Cell>
+                        <Table.Cell>{user.firstname}</Table.Cell>
+                        <Table.Cell>{user.lastname}</Table.Cell>
+                        <Table.Cell>
+                          {user.siteAdmin ? "Ja" : "Nein"}
+                        </Table.Cell>
+                      </Table.Row>
+                    ))}
+                  </Table.Body>
+                </Table>
+              )}
+            </Segment>
+          )}
+        </Query>
+      </React.Fragment>
+    );
+  }
 }
 
-interface OverviewProps {
-  data?: GetUsersData;
-  loading: boolean;
-  error: ApolloError;
-}
-
-const Overview: React.SFC<OverviewProps> = ({ loading, error, data }) => (
-  <React.Fragment>
-    <Breadcrumb size="big">
-      <Breadcrumb.Section>Übersicht</Breadcrumb.Section>
-    </Breadcrumb>
-    <Segment basic>
-      <Radio toggle label={"Nur Admin"} />
-    </Segment>
-    <Segment basic loading={loading}>
-      {error && <p>{error.message}</p>}
-      {!error && (
-        <Table celled>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>Email</Table.HeaderCell>
-              <Table.HeaderCell>Vornamen</Table.HeaderCell>
-              <Table.HeaderCell>Nachnamen</Table.HeaderCell>
-              <Table.HeaderCell>Admin</Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {data.users.map(user => (
-              <Table.Row key={user.id}>
-                <Table.Cell>{user.email}</Table.Cell>
-                <Table.Cell>{user.firstname}</Table.Cell>
-                <Table.Cell>{user.lastname}</Table.Cell>
-                <Table.Cell>{user.siteAdmin ? "Ja" : "Nein"}</Table.Cell>
-              </Table.Row>
-            ))}
-          </Table.Body>
-        </Table>
-      )}
-    </Segment>
-  </React.Fragment>
-);
-
-export default () => (
-  <Query query={query}>
-    {({ loading, error, data }) => (
-      <Overview loading={loading} error={error} data={data} />
-    )}
-  </Query>
-);
+export default Overview;
