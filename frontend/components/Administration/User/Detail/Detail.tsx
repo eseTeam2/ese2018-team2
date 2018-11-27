@@ -1,6 +1,7 @@
 import React from "react";
 import { Container, Segment } from "semantic-ui-react";
-import UserBreadcrumb from "./UserBreadcrumb";
+import UserBreadcrumb from "../UserBreadcrumb";
+import UserDetail from "./UserDetail";
 
 const DetailComponent = () => (
   <React.Fragment>
@@ -8,6 +9,7 @@ const DetailComponent = () => (
     <Segment basic>
       <Container>
         <p>TODO: Implement UPDATE and DELETE for user</p>
+        <UserDetail />
       </Container>
     </Segment>
   </React.Fragment>
