@@ -17,7 +17,7 @@ const UserDropdownComponent: React.SFC<WithMeProps> = ({ me }) => (
 const UserDropdown = withMe(UserDropdownComponent);
 
 const userItems = [
-  <Link href={"/applications"} passHref key={"Jobs"}>
+  <Link href={"/"} passHref key={"Jobs"}>
     <Menu.Item name={"Jobangebote"} />
   </Link>,
   <Link href={"/applications"} passHref key={"Applications"}>
