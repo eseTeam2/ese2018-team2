@@ -1,8 +1,7 @@
-import { ApolloError } from "apollo-boost";
 import gql from "graphql-tag";
 import React from "react";
 import { Query } from "react-apollo";
-import { Breadcrumb, Radio, Segment, Table } from "semantic-ui-react";
+import { Breadcrumb, Icon, Radio, Segment, Table } from "semantic-ui-react";
 
 const query = gql`
   query GET_USERS($onlyAdmins: Boolean) {
@@ -65,7 +64,11 @@ class Overview extends React.Component<OverviewProps, OverviewState> {
                         <Table.Cell>{user.firstname}</Table.Cell>
                         <Table.Cell>{user.lastname}</Table.Cell>
                         <Table.Cell>
-                          {user.siteAdmin ? "Ja" : "Nein"}
+                          {user.siteAdmin ? (
+                            <Icon color="green" name="checkmark" size="large" />
+                          ) : (
+                            ""
+                          )}
                         </Table.Cell>
                       </Table.Row>
                     ))}
