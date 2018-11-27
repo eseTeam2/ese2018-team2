@@ -1,15 +1,8 @@
-import {
-  Button,
-  Container,
-  Dropdown,
-  Grid,
-  Header,
-  Icon,
-  Segment,
-  Label
-} from "semantic-ui-react";
+import { ApolloError } from "apollo-boost";
+import gql from "graphql-tag";
 import * as React from "react";
-import { Head } from "next/document";
+import { Query } from "react-apollo";
+import { Container, Header, List, Segment } from "semantic-ui-react";
 import ClickableLabel from "./Search/ClickableLabel";
 
 const skillOptions = [
@@ -33,26 +26,74 @@ const skillOptions = [
   { key: "ux", text: "User Experience", value: "ux" }
 ];
 
+const query = gql`
+  query Search {
+    search {
+      nodes {
+        title
+      }
+      buckets {
+        role {
+          id
+          title
+        }
+        count
+      }
+    }
+  }
+`;
+
+interface SearchComponentProps {
+  loading: boolean;
+  error: ApolloError;
+  nodes: Array<{ title: string }>;
+  buckets: Array<{ role: { id: string; title: string }; count: number }>;
+}
+
+const SearchComponent: React.SFC<SearchComponentProps> = ({
+  loading,
+  error,
+  nodes,
+  buckets
+}) => (
+  <Segment basic loading={loading}>
+    <Header as={"h3"}>Rollen</Header>
+    {error && <p>{error.message}</p>}
+    {buckets.map(bucket => (
+      <ClickableLabel
+        key={bucket.role.id}
+        text={bucket.role.title}
+        detail={bucket.count}
+      />
+    ))}
+    {
+      <List>
+        {nodes.map(e => (
+          <List.Item key={e.title}>{e.title}</List.Item>
+        ))}
+      </List>
+    }
+  </Segment>
+);
+
+const Search = () => (
+  <Query query={query}>
+    {({ loading, error, data }) => (
+      <SearchComponent
+        loading={loading}
+        error={error}
+        nodes={!loading && !error ? data.search.nodes : []}
+        buckets={!loading && !error ? data.search.buckets : []}
+      />
+    )}
+  </Query>
+);
+
 export default () => (
   <Container>
     <Segment basic>
       <Header as="h2">Suche nach einem Job</Header>
     </Segment>
-    <Segment basic>
-      <Header as={"h3"}>Rollen</Header>
-      <ClickableLabel text={"Test"} detail={10} />
-      <Label>
-        Test
-        <Label.Detail>2</Label.Detail>
-      </Label>
-      <Label>
-        Test
-        <Label.Detail>2</Label.Detail>
-      </Label>
-      <Label>
-        Test
-        <Label.Detail>2</Label.Detail>
-      </Label>
-    </Segment>
+    <Search />
   </Container>
 );
