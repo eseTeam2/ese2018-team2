@@ -1,9 +1,8 @@
-import React from "react";
-import { Header, Segment, Table, Tab } from "semantic-ui-react";
-import gql from "graphql-tag";
-import { string } from "prop-types";
 import { ApolloError } from "apollo-boost";
+import gql from "graphql-tag";
+import React from "react";
 import { Query } from "react-apollo";
+import { Breadcrumb, Radio, Segment, Table } from "semantic-ui-react";
 
 const query = gql`
   query GET_USERS {
@@ -37,7 +36,12 @@ interface OverviewProps {
 
 const Overview: React.SFC<OverviewProps> = ({ loading, error, data }) => (
   <React.Fragment>
-    <Header as={"h2"}>Übersicht</Header>
+    <Breadcrumb size="big">
+      <Breadcrumb.Section>Übersicht</Breadcrumb.Section>
+    </Breadcrumb>
+    <Segment basic>
+      <Radio toggle label={"Nur Admin"} />
+    </Segment>
     <Segment basic loading={loading}>
       {error && <p>{error.message}</p>}
       {!error && (
