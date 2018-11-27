@@ -80,8 +80,10 @@ type Mutation {
   rejectJobApplication(applicationId: String!): Boolean!
 
   createOrganization(name: String!): Organization!
+  approveOrganization(organizationId: String!): Boolean!
 
   createRole(title: String!, description: String!): Role!
+
 }
 
 type Query {

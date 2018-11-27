@@ -1,52 +1,52 @@
 import {
-  Column,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-  VersionColumn,
-  Generated,
-  ManyToMany,
-  JoinTable
+    Column,
+    Entity,
+    OneToMany,
+    PrimaryGeneratedColumn,
+    CreateDateColumn,
+    UpdateDateColumn,
+    VersionColumn,
+    Generated,
+    ManyToMany,
+    JoinTable
 } from "typeorm";
-import { Job } from "./Job";
-import { User } from "./User";
+import {Job} from "./Job";
+import {User} from "./User";
 
 @Entity("organizations")
 export class Organization {
-  @PrimaryGeneratedColumn("uuid")
-  id: string;
+    @PrimaryGeneratedColumn("uuid")
+    id: string;
 
-  @Column("text", { nullable: false })
-  name: string;
+    @Column("text", {nullable: false})
+    name: string;
 
-  @Column("text", { nullable: false})
-  email: string;
+    @Column("text", {nullable: false})
+    email: string;
 
-  @Column("text")
-  phone: string;
+    @Column("text")
+    phone: string;
 
-  @Column("boolean", {default: false})
-  approved: boolean;
+    @Column({ type: "boolean", default: false})
+    approved: boolean;
 
-  @Column("bigint")
-  @Generated("increment")
-  sequenceNumber: number;
+    @Column("bigint")
+    @Generated("increment")
+    sequenceNumber: number;
 
-  @CreateDateColumn({ type: "timestamp with time zone" })
-  createdAt: Date;
+    @CreateDateColumn({type: "timestamp with time zone"})
+    createdAt: Date;
 
-  @UpdateDateColumn({ type: "timestamp with time zone" })
-  updatedAt: Date;
+    @UpdateDateColumn({type: "timestamp with time zone"})
+    updatedAt: Date;
 
-  @VersionColumn()
-  version: number;
+    @VersionColumn()
+    version: number;
 
-  @ManyToMany(type => User, user => user.employer)
-  @JoinTable({ name: "organisation_staff" })
-  employee: Promise<User[]>;
+    @ManyToMany(type => User, user => user.employer)
+    @JoinTable({name: "organisation_staff"})
+    employee: Promise<User[]>;
 
-  @OneToMany(type => Job, job => job.organization)
-  jobs: Promise<Job[]>;
+    @OneToMany(type => Job, job => job.organization)
+    jobs: Promise<Job[]>;
 }

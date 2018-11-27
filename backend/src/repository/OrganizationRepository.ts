@@ -1,8 +1,7 @@
 import { Connection, Repository } from "typeorm";
 import { Organization } from "../entity/Organization";
 import { User } from "../entity/User";
-import enforceAuth, { isAdmin, getUserId } from "./Utils";
-import { assertWrappingType } from "graphql";
+import enforceAuth, { enforceAdmin, getUserId, isAdmin } from "./Utils";
 
 export class OrganizationRepository {
   private connection: Connection;
@@ -25,10 +24,20 @@ export class OrganizationRepository {
     return (await this.users.findByIds([getUserId(session)], { relations: ["employer"] }))[0].employer;
   }
 
-  async createOrganization(name: string): Promise<Organization> {
-    const organization = new Organization();
-    organization.name = name;
-    await this.organizations.insert(organization);
-    return organization;
-  }
+    async createOrganization(name: string): Promise<Organization> {
+        const organization = new Organization();
+        organization.name = name;
+        await this.organizations.insert(organization);
+        return organization;
+    }
+
+    async approveOrganization(organizationId: string, session: Express.Session): Promise<any> {
+        enforceAdmin(session);
+
+        await this.organizations.update(
+            { id: organizationId },
+            { approved: true }
+        );
+        return true;
+    }
 }
