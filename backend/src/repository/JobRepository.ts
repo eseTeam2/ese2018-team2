@@ -223,7 +223,7 @@ export class JobRepository {
     const result = await elasticClient.search({
       index: "jobs",
       body: {
-        size: 20,
+        size: 5,
         query: {
           bool: {
             must: [
@@ -246,14 +246,16 @@ export class JobRepository {
     return new Array<{ id: string, title: string }>();
   }
 
-  async search(minSalary: number, maxSalary: number) {
+  async search(search: string, minSalary: number, maxSalary: number) {
     await elasticClient.ping({
       requestTimeout: 30000
     });
 
+    const matchQuery = search?createMatchQuery("title", search):{}
+  
     const salaryRange = createRangeFilter("salary", minSalary, maxSalary);
 
-    const query = createQuery([salaryRange]);
+    const query = createQuery(matchQuery, [salaryRange]);
 
     const searchResult = await elasticClient.search({
       index: "jobs",
@@ -279,7 +281,6 @@ export class JobRepository {
       key: parseInt(e.key),
       count: e.doc_count
     }));
-    console.log(todo);
 
     const roles = await this.connection.getRepository(Role).find();
 

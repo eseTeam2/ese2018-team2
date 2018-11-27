@@ -3,18 +3,21 @@ export interface CreateRangeFilterResult {
 }
 
 export interface CreateMatchQueryResult {
-  query: object;
-};
+  must: object;
+}
 
-export const createMatchQuery = (field: string, value: string): CreateMatchQueryResult => (
-  {
-    query: {
+export const createMatchQuery = (
+  field: string,
+  value: string
+): CreateMatchQueryResult => ({
+  must: [
+    {
       match: {
-        [field]: value,
+        title: value
       }
     }
-  }
-);
+  ]
+});
 
 export const createRangeFilter = (
   field: string,
@@ -55,18 +58,20 @@ export const createRangeFilter = (
   return {};
 };
 
-export const createQuery = (ranges: Array<CreateRangeFilterResult|{}>) => {
-  const filteredRanges = ranges.filter((e:any) => e.range)
-  if (filteredRanges.length === 0) {
-    return {}
-  }
+export const createQuery = (
+  matchQuery: any,
+  ranges: Array<CreateRangeFilterResult | {}>
+) => {
+  const filteredRanges = ranges.filter((e: any) => e.range);
+
+  const filter =
+    filteredRanges.length > 0 ? { filter: [...filteredRanges] } : {};
 
   return {
     query: {
       bool: {
-        filter: [
-          ...ranges
-        ]
+        ...matchQuery,
+        ...filter
       }
     }
   };

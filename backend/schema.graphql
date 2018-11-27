@@ -118,6 +118,6 @@ type Query {
 
   # Only *site admins* can access this field. 
   users(onlyAdmins: Boolean, id: String): [User!]!
-  search(minSalary: Float, maxSalary: Float): SearchConnection!
+  search(search: String, minSalary: Float, maxSalary: Float): SearchConnection!
 
 }
