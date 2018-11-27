@@ -75,4 +75,9 @@ export interface JobApplication {
   job: Job;
 }
 
+export interface JobAutocompletion {
+  id: string
+  title: string
+}
+
 export type JobApplicationState = "PENDING" | "REJECTED" | "APPROVED";

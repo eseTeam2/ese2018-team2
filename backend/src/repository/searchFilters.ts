@@ -2,6 +2,20 @@ export interface CreateRangeFilterResult {
   range: object;
 }
 
+export interface CreateMatchQueryResult {
+  query: object;
+};
+
+export const createMatchQuery = (field: string, value: string): CreateMatchQueryResult => (
+  {
+    query: {
+      match: {
+        [field]: value,
+      }
+    }
+  }
+);
+
 export const createRangeFilter = (
   field: string,
   min: number,

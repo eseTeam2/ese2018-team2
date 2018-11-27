@@ -97,6 +97,11 @@ type Mutation {
 
 }
 
+type JobAutocompletion {
+  id: String!
+  title: String!
+}
+
 type Query {
   jobs(first: Int, last: Int, before: String, after: String): JobConnection!
 
@@ -107,6 +112,9 @@ type Query {
   applications(applicationId: String): [JobApplication]!
 
   roles(id: String, title: String): [Role]!
+
+  # search completions
+  searchAutocompletions(value: String!): [JobAutocompletion!]!
 
   # Only *site admins* can access this field. 
   users(onlyAdmins: Boolean, id: String): [User!]!

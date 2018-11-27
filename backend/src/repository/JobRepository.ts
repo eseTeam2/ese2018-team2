@@ -4,7 +4,11 @@ import { Job } from "../entity/Job";
 import { Organization } from "../entity/Organization";
 import { Role } from "../entity/Role";
 import { elasticClient } from "../lib/elastic";
-import { createQuery, createRangeFilter } from "./searchFilters";
+import {
+  createQuery,
+  createRangeFilter,
+  createMatchQuery
+} from "./searchFilters";
 
 export interface JobUpdateArgs {
   id: string;
@@ -209,6 +213,37 @@ export class JobRepository {
     await this.jobs.update({ id }, fieldsToUpdate);
 
     return this.jobs.findOneOrFail(id);
+  }
+
+  async getCompletions(value: string) {
+    await elasticClient.ping({
+      requestTimeout: 30000
+    });
+
+    const result = await elasticClient.search({
+      index: "jobs",
+      body: {
+        size: 20,
+        query: {
+          bool: {
+            must: [
+              {
+                match: {
+                  title: value
+                }
+              }
+            ]
+          }
+        }
+      }
+    });
+
+    if (result.hits.hits.length > 0) {
+      // @ts-ignore
+      return result.hits.hits.map((hit) => ({ id: hit._id, title: hit._source["title"] }));
+    }
+
+    return new Array<{ id: string, title: string }>();
   }
 
   async search(minSalary: number, maxSalary: number) {

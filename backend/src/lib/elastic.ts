@@ -39,7 +39,6 @@ export const uploadJobs = async (connection: Connection, jobs: Array<Job>) => {
 
   for (let i = 0; i < jobs.length; i++) {
     const job = jobs[i];
-    console.log(job);
 
     await elasticClient.create({
       index: "jobs",
@@ -48,36 +47,9 @@ export const uploadJobs = async (connection: Connection, jobs: Array<Job>) => {
       body: {
         title: job.title,
         salary: job.salary,
-        roles: job.roles.map((e) => e.sequenceNumber),
+        roles: job.roles.map(e => e.sequenceNumber),
         sequenceNumber: job.sequenceNumber
       }
     });
   }
-
-  /*const result = await elasticClient.search({
-    index: "jobs",
-    body: {
-      query: {
-        range: {
-          salary: {
-            gte: 0,
-            lte: 2
-          }
-        }
-      },
-      aggs: {
-        Job: {
-          terms: {
-            field: "roles"
-          }
-        }
-      }
-    }
-  });
-
-  const roles = (await connection.getRepository(Role).find()).map((e) => ({id: e.sequenceNumber, title: e.title}))
-
-  console.log(result.aggregations.Job.buckets);
-  console.log(roles);*/
-
 };
