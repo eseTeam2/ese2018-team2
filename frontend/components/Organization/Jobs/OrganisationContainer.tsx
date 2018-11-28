@@ -30,7 +30,7 @@ const OrganisationContainer: React.SFC<OrganisationContainerProps> = ({
           <Table.Row>
             <Table.HeaderCell>Jobtitel</Table.HeaderCell>
             <Table.HeaderCell>
-              <Link href={"/jobs/create"}>
+              <Link href={"/org/jobs/create"}>
                 <Button as="a" icon={"plus"} floated="right" />
               </Link>
             </Table.HeaderCell>
