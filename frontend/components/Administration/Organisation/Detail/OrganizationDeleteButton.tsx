@@ -6,8 +6,8 @@ import { Button, Confirm, Popup } from "semantic-ui-react";
 import { GET_ALL_ORGANIZATIONS } from "../Overview";
 
 interface OrganizationDeleteButtonComponentProps {
-  organizationId: String;
-  onConfirm?: (organizationId: String) => void;
+  organizationId: string;
+  onConfirm?: (organizationId: string) => void;
 }
 
 interface OrganizationDeleteButtonComponentState {
@@ -55,7 +55,13 @@ class OrganizationDeleteButtonComponent extends React.Component<
         />
         <Popup
           trigger={
-            <Button icon={"trash"} color={"red"} onClick={this.openConfirm} />
+            <Button
+              content={"Delete"}
+              labelPosition="right"
+              icon={"trash"}
+              color={"red"}
+              onClick={this.openConfirm}
+            />
           }
           content={"Delete Organisation"}
         />
@@ -71,7 +77,7 @@ const DELETE_ORGANIZATION = gql`
 `;
 
 interface OrganizationDeleteButtonProps {
-  organizationId: String;
+  organizationId: string;
   router?: SingletonRouter;
 }
 

@@ -17,12 +17,19 @@ export class OrganizationRepository {
     this.jobs = connection.getRepository(Job);
   }
 
-  async getOrganizations(session: Express.Session): Promise<Organization[]> {
+  async getOrganizations(
+    session: Express.Session,
+    organizationId?: string
+  ): Promise<Organization[]> {
     enforceAuth(session);
     if (isAdmin(session)) {
+      if (organizationId) {
+        return this.organizations.findByIds([organizationId]);
+      }
       return this.organizations.find();
     }
 
+    //TODO check if id is an organization of the current user (organizational user)
     //TODO if user is not a organization user, then do not load!!!
     return (await this.users.findByIds([getUserId(session)], {
       relations: ["employer"]

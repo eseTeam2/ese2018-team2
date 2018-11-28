@@ -1,18 +1,9 @@
-import gql from "graphql-tag";
 import Link from "next/link";
 import { SingletonRouter, withRouter } from "next/router";
 import React from "react";
 import { Query } from "react-apollo";
 import { Breadcrumb, Loader } from "semantic-ui-react";
-
-const query = gql`
-  query GetUserDetail {
-    organizations {
-      id
-      name
-    }
-  }
-`;
+import { GET_ORGANIZATION } from "./Detail";
 
 interface OrganizationBreadcrumbComponentProps {
   router?: SingletonRouter;
@@ -34,7 +25,7 @@ const OrganizationBreadcrumb: React.SFC<
 
     {router.query &&
       router.query.detail && (
-        <Query query={query} variables={{ id: router.query.detail }}>
+        <Query query={GET_ORGANIZATION} variables={{ id: router.query.detail }}>
           {({ loading, error, data }) => (
             <Breadcrumb.Section>
               <Loader active={loading} inline size={"tiny"} />
