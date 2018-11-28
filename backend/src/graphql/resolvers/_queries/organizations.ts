@@ -1,7 +1,7 @@
 import { QueryResolvers } from "../../__generated__/graphqlgen";
 
-const resolver: QueryResolvers.OrganizationsResolver = (_, { organizationId }, ctx) => (
-  ctx.organizationRepository.getOrganizations(ctx.session, organizationId)
+const resolver: QueryResolvers.OrganizationsResolver = (_, { organizationId }, { session, organizationRepository }) => (
+  organizationRepository.getOrganizations(session, organizationId)
 );
 
 export default resolver;
