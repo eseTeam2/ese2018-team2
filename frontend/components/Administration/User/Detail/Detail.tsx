@@ -8,7 +8,6 @@ const DetailComponent = () => (
     <UserBreadcrumb />
     <Segment basic>
       <Container>
-        <p>TODO: Implement UPDATE and DELETE for user</p>
         <UserDetail />
       </Container>
     </Segment>
