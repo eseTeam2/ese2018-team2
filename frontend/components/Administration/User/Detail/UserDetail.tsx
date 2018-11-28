@@ -22,6 +22,7 @@ const GET_JOB_WITH_DETAILS = gql`
   }
 `;
 
+// TODO: Mutation, Update and delete
 const UserDetail: React.SFC<UserDetailProps> = ({ router }) => (
   <Query query={GET_JOB_WITH_DETAILS} variables={{ id: router.query.detail }}>
     {({ loading, error, data }) => (
