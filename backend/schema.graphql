@@ -6,7 +6,7 @@ type User {
   phone: String
   siteAdmin: Boolean!
   hasOrganizations: Boolean!
-  studentProfile: StudentProfile
+  isStudent: Boolean!
 }
 
 type StudentProfile {

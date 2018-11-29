@@ -66,7 +66,7 @@ export interface User {
   phone: string;
   siteAdmin: boolean;
   hasOrganizations: boolean;
-  studentProfile: StudentProfile;
+  isStudent: boolean;
 }
 
 export interface StudentProfile {
