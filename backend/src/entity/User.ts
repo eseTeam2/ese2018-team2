@@ -73,5 +73,5 @@ export class User {
   skills: Promise<Skill[]>;
 
   @OneToOne(type => StudentProfile, studentProfile => studentProfile.student)
-  studentProfile: Promise<StudentProfile>;
+  studentProfile: StudentProfile;
 }
