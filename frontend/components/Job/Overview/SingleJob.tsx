@@ -5,7 +5,8 @@ import {
   List,
   Message,
   TransitionablePortal,
-  Loader
+  Loader,
+  Segment
 } from "semantic-ui-react";
 import { withMe, WithMeProps } from "../../../lib/withMe";
 import gql from "graphql-tag";
@@ -59,7 +60,17 @@ class ApplyButtonComponent extends React.Component<
           open={this.state.finished}
           transition={{ animation: "slide down", duration: 100 }}
         >
-          <Message positive content={"Bewerbung wurde gesendet"} />
+          <div
+            style={{
+              left: "50%",
+              transform: "translateX(-50%)",
+              position: "fixed",
+              top: "20%",
+              zIndex: 1000
+            }}
+          >
+            <Message positive content={"Bewerbung wurde gesendet"} />
+          </div>
         </TransitionablePortal>
         <Mutation
           mutation={apply_mutation}
