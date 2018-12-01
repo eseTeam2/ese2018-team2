@@ -1,14 +1,13 @@
 import {Button, Container, Grid, Header, Message, Segment, Transition} from "semantic-ui-react";
 import * as React from "react";
+import {ReactNode} from "react";
 
 interface NotificationContainerProps {
     title: string;
     notificationTuples: {
         message: string;
         positive: boolean;
-        triggerContent: string;
-        triggerColor: string;
-        triggerOnClick: () => void;
+        trigger: ReactNode;
     }[];
 }
 
@@ -57,13 +56,8 @@ class NotificationContainer extends React.Component<NotificationContainerProps, 
                 <Segment attached={"bottom"}>
                     <Grid columns={this.props.notificationTuples.length}>
                         {this.props.notificationTuples.map(notificationTuple => (
-                            <Grid.Column width={2} onClick={e => this.handleClick(e, notificationTuple.message)}>
-                                <Button
-                                    content={notificationTuple.triggerContent}
-                                    color={notificationTuple.triggerColor}
-                                    onClick={
-                                        notificationTuple.triggerOnClick
-                                    }/>
+                            <Grid.Column key={notificationTuple.message} width={2} onClick={e => this.handleClick(e, notificationTuple.message)}>
+                                {notificationTuple.trigger}
                             </Grid.Column>))}
                     </Grid>
                 </Segment>
