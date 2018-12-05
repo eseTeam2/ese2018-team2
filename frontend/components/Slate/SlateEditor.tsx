@@ -20,10 +20,19 @@ class SlateEditor extends React.Component<SlateEditorProps, SlateEditorState> {
     };
   }
 
+  /**
+   * Updates input values of the editor on change
+   * @param value
+   */
   onChange = ({ value }) => {
     this.setState({ value: value });
   };
 
+  /**
+   * Keyboard shortcuts for bold, italic, underlined and code text
+   * @param e
+   * @param change
+   */
   onKeyDown = (e, change) => {
     if (!e.ctrlKey) {
       return;
@@ -54,10 +63,20 @@ class SlateEditor extends React.Component<SlateEditorProps, SlateEditorState> {
     }
   };
 
+  /**
+   * Stores the editor reference in local state, for button rendering
+   * @param editor
+   */
   ref = editor => {
     this.setState({ editor: editor });
   };
 
+  /**
+   * Main text renderer. Style of the rendered text is defined in here. Displays formatted text based on mark tag.
+   * @param props
+   * @param editor
+   * @param next
+   */
   renderMark = (props, editor, next) => {
     const { children, mark, attributes } = props;
 
@@ -75,6 +94,11 @@ class SlateEditor extends React.Component<SlateEditorProps, SlateEditorState> {
     }
   };
 
+  /**
+   * Triggers mark change on
+   * @param e
+   * @param type
+   */
   onClickMark = (e, type) => {
     e.preventDefault();
     this.state.editor.toggleMark(type);
