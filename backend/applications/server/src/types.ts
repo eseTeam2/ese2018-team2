@@ -67,6 +67,7 @@ export interface User {
   siteAdmin: boolean;
   hasOrganizations: boolean;
   isStudent: boolean;
+  confirmed: boolean;
 }
 
 export interface StudentProfile {

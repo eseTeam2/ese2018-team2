@@ -40,6 +40,9 @@ export class User {
   @Column("text")
   password: string;
 
+  @Column("boolean", { default: false })
+  confirmed: boolean;
+
   @Column("bigint")
   @Generated("increment")
   sequenceNumber: number;
