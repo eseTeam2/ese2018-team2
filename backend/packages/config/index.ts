@@ -15,6 +15,11 @@ export const config = convict({
     doc: "URL to elasticsearch",
     default: "localhost:9200",
     env: "ELASTICSEARCH_URL"
+  },
+  sparkpost_api_key: {
+    doc: "API Key for SparkPost mailing service",
+    default: "0a3342a6dbbe72db8b89b3f9941a4f73845a3baa",
+    env: "SPARKPOST_API_KEY"
   }
 });
 
