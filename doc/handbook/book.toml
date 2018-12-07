@@ -1,0 +1,5 @@
+[book]
+authors = ["Yannik Daellenbach", "Fabio Bertagna", "Berivan Kuereçki", "Luca Althaus"]
+multilingual = false
+src = "src"
+title = "unijobs.me handbook"
