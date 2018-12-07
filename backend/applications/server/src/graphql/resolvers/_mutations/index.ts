@@ -14,6 +14,7 @@ import createSkill from "./createSkill";
 import approveOrganization from "./approveOrganization";
 import deleteOrganization from "./deleteOrganization";
 import sendEmailTo from "./sendEmailTo";
+import createUser from "./createUser";
 
 export const Mutation: MutationResolvers.Type = {
   createJob,
@@ -30,7 +31,8 @@ export const Mutation: MutationResolvers.Type = {
   applyForJob,
   approveJobApplication,
   rejectJobApplication,
-  sendEmailTo
+  sendEmailTo,
+  createUser
 };
 
 export default Mutation;

@@ -65,8 +65,6 @@ export interface User {
   email: string;
   phone: string;
   siteAdmin: boolean;
-  hasOrganizations: boolean;
-  isStudent: boolean;
   confirmed: boolean;
 }
 

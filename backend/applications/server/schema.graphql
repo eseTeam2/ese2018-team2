@@ -10,6 +10,17 @@ type User {
   confirmed: Boolean!
 }
 
+input CreateUserInput {
+  email: String!
+  password: String!
+  firstname: String!
+  lastname: String!
+  phone: String
+  siteAdmin: Boolean
+  studyProgram: String
+  university: String
+}
+
 type StudentProfile {
   id: ID!
   student: User!
@@ -86,6 +97,8 @@ type SearchConnection {
 type Mutation {
   login(email: String!, pw: String!): Boolean!
   logout: Boolean!
+
+  createUser(input: CreateUserInput!): User!
 
   createJob(input: CreateJobInput!): Job!
   updateJob(id: ID!, title: String, description: String): Job!
