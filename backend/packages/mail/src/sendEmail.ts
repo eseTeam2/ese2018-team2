@@ -2,7 +2,7 @@ import SparkPost from "sparkpost";
 import config from "@unijobs/backend-modules-config";
 
 export const sendEmail = async (recipient: string) => {
-  try {
+  if (config.get("sparkpost_api_key").length > 0) {
     const client = new SparkPost(config.get("sparkpost_api_key"));
     const response = await client.transmissions.send({
       options: {
@@ -24,11 +24,11 @@ export const sendEmail = async (recipient: string) => {
     });
     console.log(response);
     return true;
-  } catch (e) {
+  } else {
     console.log(
-      "-------------------------------------------------------" +
-        "           WARNING! SparkPost API Key not set          " +
-        "-------------------------------------------------------"
+      "-------------------------------------------------------\n" +
+        "           WARNING! SparkPost API Key not set          \n" +
+        "-------------------------------------------------------\n"
     );
     return false;
   }
