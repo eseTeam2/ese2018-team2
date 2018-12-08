@@ -1,0 +1,134 @@
+type User {
+  id: ID!
+  email: String!
+  firstname: String!
+  lastname: String!
+  phone: String
+  siteAdmin: Boolean!
+  hasOrganizations: Boolean!
+  isStudent: Boolean!
+}
+
+type StudentProfile {
+  id: ID!
+  student: User!
+  studyProgram: String!
+  university: String!
+}
+
+type Organization {
+  id: ID!
+  name: String!
+  email: String!
+  phone: String
+  jobs: [Job]!
+  employees: [User]!
+  approved: Boolean!
+}
+
+type Job {
+  id: ID!
+  title: String!
+  description: String!
+  organization: Organization!
+  applied: Boolean!
+}
+
+type JobConnection {
+  nodes: [Job!]!
+  pageInfo: JobPageInfo!
+  totalCount: Int!
+}
+
+type JobPageInfo {
+  endCursor: String
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+}
+
+type JobApplication {
+  id: ID!
+  state: JobApplicationState!
+  user: User!
+  job: Job!
+}
+
+enum JobApplicationState {
+  PENDING
+  REJECTED
+  APPROVED
+}
+
+type Skill {
+  id: ID!
+  title: String!
+  description: String!
+}
+
+input CreateJobInput {
+  title: String!
+  description: String = ""
+  organization: ID!
+}
+
+type AggregationBucket {
+  skill: Skill!
+  count: Int!
+}
+
+type SearchConnection {
+  nodes: [Job!]!
+  buckets: [AggregationBucket!]!
+}
+
+type Mutation {
+  login(email: String!, pw: String!): Boolean!
+  logout: Boolean!
+
+  createJob(input: CreateJobInput!): Job!
+  updateJob(id: ID!, title: String, description: String): Job!
+  deleteJob(job: ID!): Boolean!
+
+  addBookmark(jobId: String!): Boolean!
+  removeBookmark(jobId: String!): Boolean!
+
+  applyForJob(jobId: String!): Boolean!
+  approveJobApplication(applicationId: String!): Boolean!
+  rejectJobApplication(applicationId: String!): Boolean!
+
+  createOrganization(name: String!): Organization!
+  deleteOrganization(organizationId: String!): Boolean!
+  approveOrganization(organizationId: String!): Boolean!
+
+  createSkill(title: String!, description: String!): Skill!
+
+  #POC: send an email to someone on buttonclick
+  sendEmailTo(email: String!): Boolean
+}
+
+type JobAutocompletion {
+  id: String!
+  title: String!
+}
+
+type Query {
+  jobs(first: Int, last: Int, before: String, after: String): JobConnection!
+
+  job(id: String!): Job
+
+  organizations(organizationId: String): [Organization]!
+
+  me: User!
+
+  applications(applicationId: String): [JobApplication]!
+
+  skills(id: String, title: String): [Skill!]!
+
+  # search completions
+  searchAutocompletions(value: String!): [JobAutocompletion!]!
+
+  # Only *site admins* can access this field.
+  users(onlyAdmins: Boolean, id: String): [User!]!
+  search(search: String, minSalary: Float, maxSalary: Float): SearchConnection!
+}

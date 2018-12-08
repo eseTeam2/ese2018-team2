@@ -92,8 +92,8 @@ class LoginComponent extends React.Component<
             </Segment>
             <Segment textAlign={"center"}>
               <Header> No account yet? </Header>
-              <Link>
-                <Button fluid icon labelPosition={"right"}>
+              <Link href={"/register"}>
+                <Button as={"a"} fluid icon labelPosition={"right"}>
                   Sign up
                   <Icon name="arrow right" />
                 </Button>
