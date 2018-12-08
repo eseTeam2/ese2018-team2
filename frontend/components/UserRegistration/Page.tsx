@@ -11,10 +11,13 @@ interface PageProps {
 
 const Page: React.FC<PageProps> = ({ router }) => {
   return (
-    <Container>
-      {router.query.id && <ConfirmEmail id={router.query.id[0]} />}
-      {!router.query.id && <UserRegistration />}
-    </Container>
+    <React.Fragment>
+      <NavBar />
+      <Container>
+        {router.query.id && <ConfirmEmail id={router.query.id[0]} />}
+        {!router.query.id && <UserRegistration />}
+      </Container>
+    </React.Fragment>
   );
 };
 

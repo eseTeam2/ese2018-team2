@@ -1,5 +1,12 @@
 import * as React from "react";
-import { Button, Form, Segment } from "semantic-ui-react";
+import {
+  Button,
+  Form,
+  Header,
+  Segment,
+  Container,
+  Icon
+} from "semantic-ui-react";
 import { toast } from "react-toastify";
 
 interface UserRegistrationComponentProps {
@@ -69,106 +76,115 @@ class UserRegistrationComponent extends React.Component<
   render() {
     const initialValues = this.state;
     return (
-      <Segment>
-        <Form onSubmit={this.handleSubmit}>
-          <Form.Group>
-            <Form.Input
-              width={3}
+      <Container text>
+        <Header as={"h1"}>Join unijobs</Header>
+        <Segment clearing>
+          <Form onSubmit={this.handleSubmit}>
+            <Form.Group>
+              <Form.Input
+                width={8}
+                required
+                label="Firstname"
+                name="firstname"
+                value={initialValues.firstname}
+                placeholder="Firstname"
+                onChange={this.handleChange}
+              />
+              <Form.Input
+                width={8}
+                required
+                label="Lastname"
+                name="lastname"
+                value={initialValues.lastname}
+                placeholder="Lastname"
+                onChange={this.handleChange}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Input
+                width={16}
+                required
+                label="Email"
+                name="email"
+                value={initialValues.email}
+                placeholder="Email"
+                onChange={this.handleChange}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Input
+                width={8}
+                required
+                label="University"
+                name="university"
+                value={initialValues.university}
+                placeholder="University"
+                onChange={this.handleChange}
+              />
+              <Form.Input
+                width={16}
+                required
+                label="Study Program"
+                name="studyProgram"
+                value={initialValues.studyProgram}
+                placeholder="Study Program"
+                onChange={this.handleChange}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Input
+                width={6}
+                required
+                label="Phone"
+                name="phone"
+                value={initialValues.phone}
+                placeholder="Phone"
+                onChange={this.handleChange}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Input
+                width={8}
+                required
+                type="password"
+                label="Enter Password"
+                name="firstPassword"
+                value={initialValues.firstPassword}
+                placeholder="Password"
+                onChange={this.handleChange}
+              />
+              <Form.Input
+                width={8}
+                required
+                type="password"
+                label="Repeat Password"
+                name="secondPassword"
+                value={initialValues.secondPassword}
+                placeholder="Password"
+                onChange={this.handleChange}
+              />
+            </Form.Group>
+            <Form.Checkbox
+              name={"acceptTermsAndConditions"}
               required
-              label="Firstname"
-              name="firstname"
-              value={initialValues.firstname}
-              placeholder="Firstname"
-              onChange={this.handleChange}
+              label="I agree to the Terms and Conditions"
+              checked={initialValues.acceptTermsAndConditions}
+              onChange={this.toggleTermsAndConditions}
             />
-            <Form.Input
-              width={3}
-              required
-              label="Lastname"
-              name="lastname"
-              value={initialValues.lastname}
-              placeholder="Lastname"
-              onChange={this.handleChange}
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Input
-              width={6}
-              required
-              label="Email"
-              name="email"
-              value={initialValues.email}
-              placeholder="Email"
-              onChange={this.handleChange}
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Input
-              width={6}
-              required
-              label="University"
-              name="university"
-              value={initialValues.university}
-              placeholder="University"
-              onChange={this.handleChange}
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Input
-              width={6}
-              required
-              label="Study Program"
-              name="studyProgram"
-              value={initialValues.studyProgram}
-              placeholder="Study Program"
-              onChange={this.handleChange}
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Input
-              width={6}
-              required
-              label="Phone"
-              name="phone"
-              value={initialValues.phone}
-              placeholder="Phone"
-              onChange={this.handleChange}
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Input
-              width={3}
-              required
-              type="password"
-              label="Enter Password"
-              name="firstPassword"
-              value={initialValues.firstPassword}
-              placeholder="Password"
-              onChange={this.handleChange}
-            />
-            <Form.Input
-              width={3}
-              required
-              type="password"
-              label="Repeat Password"
-              name="secondPassword"
-              value={initialValues.secondPassword}
-              placeholder="Password"
-              onChange={this.handleChange}
-            />
-          </Form.Group>
-          <Form.Checkbox
-            name={"acceptTermsAndConditions"}
-            required
-            label="I agree to the Terms and Conditions"
-            checked={initialValues.acceptTermsAndConditions}
-            onChange={this.toggleTermsAndConditions}
-          />
-          <Button color="green" type="submit">
-            Register
-          </Button>
-        </Form>
-      </Segment>
+            <Button
+              floated="right"
+              color="green"
+              type="submit"
+              icon
+              labelPosition={"right"}
+              size={"huge"}
+            >
+              <Icon name="arrow right" />
+              Register
+            </Button>
+          </Form>
+        </Segment>
+      </Container>
     );
   }
 }
