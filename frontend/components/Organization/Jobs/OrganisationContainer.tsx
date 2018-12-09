@@ -6,19 +6,24 @@ import OrganizationOverviewItem from "./OrganizationOverviewItem";
 interface Job {
   id: string;
   title: string;
+  description: string;
+  salary: number;
 }
 
 interface Organisation {
   id: string;
   name: string;
-  jobs: Job[];
+  jobs: {
+    id: string;
+    title: string;
+  };
 }
 
 interface OrganisationContainerProps {
   org: Organisation;
 }
 
-const OrganisationContainer: React.SFC<OrganisationContainerProps> = ({
+const OrganisationContainer: React.FC<OrganisationContainerProps> = ({
   org
 }) => (
   <Container>
@@ -26,13 +31,16 @@ const OrganisationContainer: React.SFC<OrganisationContainerProps> = ({
       {org.name}
     </Header>
     <Segment attached>
-      <Table singleLine fixed selectable>
+      <Table selectable celled compact>
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>
               <Header>Jobtitel</Header>
             </Table.HeaderCell>
             <Table.HeaderCell>
+              <Header>Bewerbungen</Header>
+            </Table.HeaderCell>
+            <Table.HeaderCell textAlign="center">
               <Link href={"/org/jobs/create"}>
                 <Button as="a" icon={"plus"} floated="right" />
               </Link>
@@ -41,7 +49,7 @@ const OrganisationContainer: React.SFC<OrganisationContainerProps> = ({
         </Table.Header>
         <Table.Body>
           {org.jobs.map(job => (
-            <OrganizationOverviewItem job={job} />
+            <OrganizationOverviewItem key={job.id} job={job} />
           ))}
         </Table.Body>
       </Table>
