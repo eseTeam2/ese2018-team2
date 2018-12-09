@@ -130,6 +130,8 @@ type Query {
 
   applications(applicationId: String): [JobApplication]!
 
+  applicationsForJob(jobId: String!): [JobApplication]!
+
   skills(id: String, title: String): [Skill!]!
 
   # search completions
