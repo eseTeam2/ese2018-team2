@@ -1,4 +1,11 @@
-import { Button, Container, Header, Segment, Table } from "semantic-ui-react";
+import {
+  Button,
+  Container,
+  Header,
+  Segment,
+  Table,
+  Icon
+} from "semantic-ui-react";
 import * as React from "react";
 import Link from "next/link";
 import OrganizationOverviewItem from "./OrganizationOverviewItem";
@@ -32,19 +39,37 @@ const OrganisationContainer: React.FC<OrganisationContainerProps> = ({
     </Header>
     <Segment attached>
       <Table selectable celled compact>
-        <Table.Header>
+        <Table.Header fullWidth>
           <Table.Row>
-            <Table.HeaderCell>
-              <Header>Jobtitel</Header>
-            </Table.HeaderCell>
-            <Table.HeaderCell>
-              <Header>Bewerbungen</Header>
-            </Table.HeaderCell>
-            <Table.HeaderCell textAlign="center">
+            <Table.HeaderCell colSpan="4">
+              <Button size="small" icon labelPosition="left">
+                <Icon name="square outline" />
+                Select All
+              </Button>
+              <Button size="small" icon labelPosition="left" color="red">
+                <Icon name="trash" />
+                Delete
+              </Button>
+
               <Link href={"/org/jobs/create"}>
-                <Button as="a" icon={"plus"} floated="right" />
+                <Button
+                  as={"a"}
+                  floated="right"
+                  icon
+                  labelPosition="left"
+                  primary
+                  size="small"
+                >
+                  <Icon name="add" /> Neuer Job
+                </Button>
               </Link>
             </Table.HeaderCell>
+          </Table.Row>
+          <Table.Row>
+            <Table.HeaderCell />
+            <Table.HeaderCell>Jobtitel</Table.HeaderCell>
+            <Table.HeaderCell>Bewerbungen</Table.HeaderCell>
+            <Table.HeaderCell textAlign="center" />
           </Table.Row>
         </Table.Header>
         <Table.Body>

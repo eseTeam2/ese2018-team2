@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Button, Table, Header } from "semantic-ui-react";
+import { Button, Table, Header, Checkbox } from "semantic-ui-react";
 import Router from "next/router";
 import Link from "next/link";
 import { Query } from "react-apollo";
@@ -38,20 +38,19 @@ const OrganizationOverviewItemComponent: React.FC<
       });
     }}
   >
-    <Table.Cell>
-      <strong>{job.title}</strong>
+    <Table.Cell collapsing>
+      <Checkbox />
     </Table.Cell>
+    <Table.Cell>{job.title}</Table.Cell>
     <Table.Cell textAlign={"center"}>
       {console.log(data)}
       {!error &&
-        !!data.applicationsForJob && (
-          <Header as={"h5"}>{data.applicationsForJob.length}</Header>
-        )}
-      {!error && !data.applicationsForJob && <Header as={"h4"}>0</Header>}
+        !!data.applicationsForJob && <p>{data.applicationsForJob.length}</p>}
+      {!error && !data.applicationsForJob && 0}
     </Table.Cell>
-    <Table.Cell>
+    <Table.Cell textAlign={"center"}>
       <Link href={"/org/jobs?id=" + job.id}>
-        <Button as="a" icon={"arrow right"} floated="right" />
+        <Button as="a" icon={"arrow right"} size="small" />
       </Link>
     </Table.Cell>
   </Table.Row>
