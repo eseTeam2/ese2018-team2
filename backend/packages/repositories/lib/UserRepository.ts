@@ -171,6 +171,7 @@ export class UserRepository {
         }
         await this.users.insert(user);
 
+
         return user;
     }
 }

@@ -20,6 +20,11 @@ export const config = convict({
     doc: "API Key for SparkPost mailing service",
     default: "",
     env: "SPARKPOST_API_KEY"
+  },
+  mailgun_api_key: {
+    doc: "API Key for Mailgun mailing service",
+    default: "",
+    env: "MAILGUN_API_KEY"
   }
 });
 
