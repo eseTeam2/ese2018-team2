@@ -29,32 +29,44 @@ const CREATE_USER = gql`
         university: $university
       }
     ) {
-      confirmed
+      email
+      id
     }
   }
 `;
 
 class UserRegistration extends React.Component<UserRegistrationProps> {
+  state = {
+    email: "",
+    id: ""
+  };
+
   render() {
     return (
-      <Mutation mutation={CREATE_USER}>
+      <Mutation
+        mutation={CREATE_USER}
+        ignoreResults={false}
+        onCompleted={data =>
+          alert("localhost:3000/register?id=" + data.createUser.id)
+        }
+      >
         {(createStudent, { loading }) => {
           return (
             <UserRegistrationComponent
               loading={loading}
-              onCreate={async data => {
+              onCreate={async formData => {
                 await createStudent({
                   variables: {
-                    email: data.email,
-                    password: data.password,
-                    firstname: data.firstname,
-                    lastname: data.lastname,
-                    phone: data.phone,
-                    studyProgram: data.studyProgram,
-                    university: data.university
+                    email: formData.email,
+                    password: formData.password,
+                    firstname: formData.firstname,
+                    lastname: formData.lastname,
+                    phone: formData.phone,
+                    studyProgram: formData.studyProgram,
+                    university: formData.university
                   }
                 });
-                await this.props.router.replace("/");
+                //await this.props.router.replace("/");
               }}
             />
           );

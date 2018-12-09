@@ -137,6 +137,10 @@ export class UserRepository {
         return true;
     }
 
+    /**
+     * Generic function to send an email to a given address
+     * @param email
+     */
     async sendEmailTo(email: string): Promise<any> {
         return await sendEmail(email);
     }
