@@ -4,7 +4,7 @@ export const sendEmail = async (recipient: string) => {
 
     if (config.get("mailgun_api_key").length > 0) {
         const API_KEY = config.get("mailgun_api_key");
-        const DOMAIN = 'mail.unijobs.me';
+        const DOMAIN = 'sandbox05046e2743cc4d5d8296500ca73d33bd.mailgun.org';
         const mailgun = require('mailgun-js')({apiKey: API_KEY, domain: DOMAIN});
 
         const data = {
