@@ -31,12 +31,13 @@ export interface Job {
 }
 
 export interface OrganizationJob {
-    id: string
-    title: string
-    description: string
-    salary: number
-    applied: boolean
-    applicationCount: number
+    id: string;
+    title: string;
+    description: string;
+    salary: number;
+    applied: boolean;
+    organization: any;
+    applicationCount: number;
 }
 
 export interface AggregationBucket {

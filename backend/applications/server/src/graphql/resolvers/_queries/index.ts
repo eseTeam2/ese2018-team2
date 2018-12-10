@@ -9,6 +9,7 @@ import search from "./search";
 import searchAutocompletions from "./searchAutocompletions";
 import job from "./job"
 import applicationsForJob from "./applicationsForJob";
+import getOrganizationJobs from "./getOrganizationJobs";
 
 export const Query: QueryResolvers.Type = {
     jobs,
@@ -17,6 +18,7 @@ export const Query: QueryResolvers.Type = {
     me,
     applications,
     applicationsForJob,
+    getOrganizationJobs,
     users,
     search,
     searchAutocompletions,

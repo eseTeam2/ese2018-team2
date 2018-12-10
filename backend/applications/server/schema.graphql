@@ -145,6 +145,8 @@ type Query {
 
   organizations(organizationId: String): [Organization]!
 
+  getOrganizationJobs(organizationId: String!):[OrganizationJob]!
+
   me: User!
 
   applications(applicationId: String): [JobApplication]!
