@@ -31,8 +31,6 @@ interface JobInterface {
   title: String!
   description: String!
   salary: Float!
-  organization: Organization!
-  applied: Boolean!
 }
 
 type Job {
@@ -44,13 +42,11 @@ type Job {
   applied: Boolean!
 }
 
-type OrganizationJob implements JobInterface{
+type OrganizationJob implements JobInterface {
   id: ID!
   title: String!
   description: String!
   salary: Float!
-  organization: Organization!
-  applied: Boolean!
   applicationCount: Int!
 }
 
@@ -145,7 +141,7 @@ type Query {
 
   organizations(organizationId: String): [Organization]!
 
-  getOrganizationJobs(organizationId: String!):[OrganizationJob]!
+  getOrganizationJobs(organizationId: String!): [OrganizationJob]!
 
   me: User!
 

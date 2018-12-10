@@ -12,7 +12,6 @@ import {
 } from "@unijobs/backend-modules-search";
 import { Connection, Repository } from "typeorm";
 import { getUserId } from "./Utils";
-import {OrganizationJob} from "unijobs-backend/dist/src/types";
 
 export interface JobUpdateArgs {
   id: string;
@@ -41,23 +40,15 @@ export class JobRepository {
     this.organizations = connection.getRepository(Organization);
   }
 
+  async getOrganizationJobs(organizationId: string, session: Express.Session) {
+    const jobs = await this.jobs
+      .createQueryBuilder("jobs")
+      .where('jobs."organizationId" = :organization', {
+        organization: organizationId
+      })
+      .getMany();
 
-  async getOrganizationJobs(organizationId: string, session: Express.Session){
-      const jobs = await this.jobs
-          .createQueryBuilder("jobs")
-          .where('jobs.organizationId = :organization', {organizationId})
-          .getMany();
-
-      return jobs.map((job) => this.jobToOrganizationJob(job));
-  }
-
-  jobToOrganizationJob(job: Job): OrganizationJob{
-    let orgJob = new OrganizationJob();
-    orgJob.id = job.id;
-    orgJob.title = job.title;
-    orgJob.description = job.description;
-    orgJob.salary = job.salary;
-    orgJob.organization = job.organization;
+    return jobs;
   }
 
   // TODO create interface for argument type
@@ -344,8 +335,6 @@ export class JobRepository {
       aggregations: searchResult.aggregations
     };
   }
-
-
 }
 
 export default JobRepository;
