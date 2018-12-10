@@ -1,13 +1,13 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
+  Generated,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
-  CreateDateColumn,
   UpdateDateColumn,
-  VersionColumn,
-  Generated
+  VersionColumn
 } from "typeorm";
 import { Job } from "./Job";
 import JobApplicationState from "./JobApplicationState";
