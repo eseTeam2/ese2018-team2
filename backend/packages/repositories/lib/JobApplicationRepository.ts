@@ -92,6 +92,15 @@ export class JobApplicationRepository {
         return true;
     }
 
+    async applicationsCount(jobId: string, session: Express.Session): Promise<number>{
+        enforceAuth(session);
+
+        return await this.applications
+            .createQueryBuilder("jobApplications")
+            .where('"jobId" = :jobId', {jobId})
+            .getCount();
+    }
+
     /**
      * Check if current user already applied to a specific job
      * @param jobId Job to check
