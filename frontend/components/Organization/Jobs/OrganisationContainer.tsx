@@ -44,7 +44,7 @@ const OrganisationContainer: React.FC<OrganisationContainerProps> = ({
             <Table.HeaderCell colSpan="4">
               <Button size="small" icon labelPosition="left">
                 <Icon name="square outline" />
-                Select All
+                Alle markieren
               </Button>
               <Button size="small" icon labelPosition="left" color="red">
                 <Icon name="trash" />
