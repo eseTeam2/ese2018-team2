@@ -16,7 +16,7 @@ import { Skill } from "./Skill";
 import { User } from "./User";
 import { JobApplication } from "./JobApplication";
 
-@Entity("jobs")
+@Entity("jobs", { name: "jobs" })
 export class Job {
   @PrimaryGeneratedColumn("uuid")
   id: string;
@@ -28,7 +28,7 @@ export class Job {
   description: string;
 
   @ManyToOne(type => Organization, organization => organization.jobs, {
-    eager: true,
+    eager: true
   })
   organization: Organization;
 
@@ -55,7 +55,7 @@ export class Job {
   end: Date;
 
   @ManyToMany(type => Skill)
-  @JoinTable({name:"jobs_skills"})
+  @JoinTable({ name: "jobs_skills" })
   skills: Skill[];
 
   @ManyToMany(type => User, user => user.bookmarkedJobs)
