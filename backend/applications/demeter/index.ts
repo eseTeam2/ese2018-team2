@@ -3,13 +3,15 @@ import {
   JobApplication,
   Organization,
   Skill,
-  User,
-  StudentProfile
+  StudentProfile,
+  StudyProgram,
+  University,
+  User
 } from "@unijobs/backend-modules-models";
 import {
+  createIndices,
   elasticClient,
-  uploadJobs,
-  createIndices
+  uploadJobs
 } from "@unijobs/backend-modules-search";
 import bcrypt from "bcryptjs";
 import { createConnection } from "typeorm";
@@ -24,7 +26,16 @@ function sleep(millis: number) {
   const connection = await createConnection({
     type: "postgres",
     url: "postgres://postgres@localhost:5432/postgres",
-    entities: [Job, Organization, Skill, User, JobApplication, StudentProfile],
+    entities: [
+      Job,
+      Organization,
+      Skill,
+      User,
+      JobApplication,
+      StudentProfile,
+      University,
+      StudyProgram
+    ],
     logging: true
   });
 
