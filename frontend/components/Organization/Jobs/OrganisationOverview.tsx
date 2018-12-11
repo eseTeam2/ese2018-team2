@@ -50,7 +50,7 @@ const OrganisationOverviewComponent: React.FC<
                   org={org}
                   loading={loading}
                   error={error}
-                  jobs={data.getOrganizationJobs}
+                  jobs={!error && data.getOrganizationJobs}
                 />
               )}
             </Query>

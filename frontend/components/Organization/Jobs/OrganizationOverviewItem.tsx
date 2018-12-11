@@ -12,7 +12,6 @@ interface Job {
 
 interface OrganizationOverviewItemProps {
   job: Job;
-  data: any;
   loading: boolean;
   error: ApolloError;
 }
@@ -31,25 +30,27 @@ class OrganizationOverviewItem extends React.Component<
 
   render() {
     return (
-      <Table.Row
-        onClick={e => {
-          e.preventDefault();
-          this.setState({ checked: !this.state.checked });
-        }}
-      >
-        <Table.Cell collapsing>
-          <Checkbox checked={this.state.checked} />
-        </Table.Cell>
-        <Table.Cell>{this.props.job.title}</Table.Cell>
-        <Table.Cell textAlign={"center"}>
-          {!this.props.error && <p>{this.props.job.applicationCount}</p>}
-        </Table.Cell>
-        <Table.Cell textAlign={"center"}>
-          <Link href={"/org/jobs?detail=" + this.props.job.id}>
-            <Button as="a" icon={"arrow right"} size="small" />
-          </Link>
-        </Table.Cell>
-      </Table.Row>
+      !this.props.loading && (
+        <Table.Row
+          onClick={e => {
+            e.preventDefault();
+            this.setState({ checked: !this.state.checked });
+          }}
+        >
+          <Table.Cell collapsing>
+            <Checkbox checked={this.state.checked} />
+          </Table.Cell>
+          <Table.Cell>{this.props.job.title}</Table.Cell>
+          <Table.Cell textAlign={"center"}>
+            {!this.props.error && <p>{this.props.job.applicationCount}</p>}
+          </Table.Cell>
+          <Table.Cell textAlign={"center"}>
+            <Link href={"/org/jobs?detail=" + this.props.job.id}>
+              <Button as="a" icon={"arrow right"} size="small" />
+            </Link>
+          </Table.Cell>
+        </Table.Row>
+      )
     );
   }
 }
