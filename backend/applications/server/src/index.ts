@@ -3,6 +3,7 @@ import {
   Job,
   JobApplication,
   Organization,
+  Page,
   Skill,
   StudentProfile,
   StudyProgram,
@@ -39,7 +40,8 @@ createConnection({
     JobApplication,
     StudentProfile,
     University,
-    StudyProgram
+    StudyProgram,
+    Page
   ],
   logging: true
 }).then(async connection => {

@@ -2,6 +2,7 @@ import {
   Job,
   JobApplication,
   Organization,
+  Page,
   Skill,
   StudentProfile,
   StudyProgram,
@@ -16,8 +17,8 @@ import {
 import bcrypt from "bcryptjs";
 import { createConnection } from "typeorm";
 import generateTitle from "./rnd/buzz";
-import users from "./users";
 import studyPrograms from "./studyPrograms";
+import users from "./users";
 
 function sleep(millis: number) {
   return new Promise(resolve => setTimeout(resolve, millis));
@@ -35,7 +36,8 @@ function sleep(millis: number) {
       JobApplication,
       StudentProfile,
       University,
-      StudyProgram
+      StudyProgram,
+      Page
     ],
     logging: true
   });
