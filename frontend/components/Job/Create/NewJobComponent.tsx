@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Container, Header, Segment } from "semantic-ui-react";
 import JobEditor from "./JobEditor";
+import NewJobForm from "./Forms/NewJobForm";
 
 interface NewJobComponentProps {}
 
@@ -16,7 +17,7 @@ class NewJobComponent extends React.Component<
         <Segment.Group>
           <Segment clearing>
             <Header as={"h1"}>Erstelle dein Jobinserat</Header>
-            <JobEditor />
+            <NewJobForm />
           </Segment>
         </Segment.Group>
       </Container>
