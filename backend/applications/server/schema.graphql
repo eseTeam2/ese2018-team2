@@ -26,6 +26,16 @@ type Organization {
   approved: Boolean!
 }
 
+type StudyProgram {
+  id: ID!
+  title: String!
+}
+
+type OrganizationPage {
+  id: ID!
+  studyPrograms: [StudyProgram!]!
+}
+
 interface JobInterface {
   id: ID!
   title: String!
@@ -140,6 +150,8 @@ type JobAutocompletion {
 }
 
 type Query {
+  availableStudyPrograms: [StudyProgram!]!
+
   jobs(first: Int, last: Int, before: String, after: String): JobConnection!
 
   job(id: String!): Job
