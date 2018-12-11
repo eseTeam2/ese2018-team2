@@ -17,6 +17,7 @@ import bcrypt from "bcryptjs";
 import { createConnection } from "typeorm";
 import generateTitle from "./rnd/buzz";
 import users from "./users";
+import studyPrograms from "./studyPrograms";
 
 function sleep(millis: number) {
   return new Promise(resolve => setTimeout(resolve, millis));
@@ -104,6 +105,18 @@ function sleep(millis: number) {
   }
 
   const skills = await connection.getRepository(Skill).find();
+
+  const unibe = new University();
+  unibe.name = "Unibersität Bern";
+
+  await connection.getRepository(University).save(unibe);
+
+  for (let i = 0; i < studyPrograms.length; i++) {
+    const p = new StudyProgram();
+    p.title = studyPrograms[i];
+    p.universities = [unibe];
+    await connection.getRepository(StudyProgram).save(p);
+  }
 
   for (let i = 0; i < 200; i++) {
     const job = new Job();

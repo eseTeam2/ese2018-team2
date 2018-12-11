@@ -8,7 +8,7 @@ import {
 import { University } from "./University";
 import { Job } from "./Job";
 
-@Entity("studyProgram", { name: "studyProgram" })
+@Entity("studyPrograms", { name: "studyPrograms" })
 export class StudyProgram {
   @PrimaryGeneratedColumn("uuid")
   id: string;
@@ -17,7 +17,7 @@ export class StudyProgram {
   title: string;
 
   @ManyToMany(type => University)
-  @JoinTable({ name: "studyProgram_university" })
+  @JoinTable({ name: "studyPrograms_universities" })
   universities: University[];
 
   @ManyToMany(type => Job)

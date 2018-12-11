@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class Init1544566838254 implements MigrationInterface {
+export class Init1544567925902 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<any> {
     await queryRunner.query(
       `CREATE TABLE "organizations" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "name" text NOT NULL, "email" text NOT NULL, "phone" text NOT NULL, "approved" boolean NOT NULL DEFAULT false, "sequenceNumber" BIGSERIAL NOT NULL, "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "version" integer NOT NULL, CONSTRAINT "PK_6b031fcd0863e3f6b44230163f9" PRIMARY KEY ("id"))`
@@ -24,7 +24,7 @@ export class Init1544566838254 implements MigrationInterface {
       `CREATE TABLE "universities" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "name" character varying NOT NULL, CONSTRAINT "UQ_25b08a78732a663bb35872eaa70" UNIQUE ("name"), CONSTRAINT "PK_8da52f2cee6b407559fdbabf59e" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
-      `CREATE TABLE "studyProgram" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "title" character varying NOT NULL, CONSTRAINT "UQ_c027602fcc864aec305c3e8dedc" UNIQUE ("title"), CONSTRAINT "PK_a18c7fc9ab9878d32175fbe4450" PRIMARY KEY ("id"))`
+      `CREATE TABLE "studyPrograms" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "title" character varying NOT NULL, CONSTRAINT "UQ_94dedc3ff4d64d0e7d51e8540ec" UNIQUE ("title"), CONSTRAINT "PK_86f984b4cf04b03fead3d87be15" PRIMARY KEY ("id"))`
     );
     await queryRunner.query(
       `CREATE TABLE "jobs" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "title" text NOT NULL, "description" text NOT NULL, "salary" float NOT NULL, "isSalaryPerHour" boolean NOT NULL DEFAULT false, "workload" float NOT NULL, "sequenceNumber" BIGSERIAL NOT NULL, "createdAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "updatedAt" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT now(), "version" integer NOT NULL, "start" date NOT NULL, "end" TIMESTAMP, "workingTime" integer, "isWorkingTimePerWeek" boolean DEFAULT 'true', "organizationId" uuid, CONSTRAINT "PK_cf0a6c42b72fcc7f7c237def345" PRIMARY KEY ("id"))`
@@ -39,10 +39,10 @@ export class Init1544566838254 implements MigrationInterface {
       `CREATE TABLE "users_skills" ("usersId" uuid NOT NULL, "skillsId" uuid NOT NULL, CONSTRAINT "PK_5e655012663719d6320c0a2a5ba" PRIMARY KEY ("usersId", "skillsId"))`
     );
     await queryRunner.query(
-      `CREATE TABLE "studyProgram_university" ("studyProgramId" uuid NOT NULL, "universitiesId" uuid NOT NULL, CONSTRAINT "PK_2e84055d505051fe25869f79237" PRIMARY KEY ("studyProgramId", "universitiesId"))`
+      `CREATE TABLE "studyPrograms_universities" ("studyProgramsId" uuid NOT NULL, "universitiesId" uuid NOT NULL, CONSTRAINT "PK_a010693f9e62f35048b5d2e9fee" PRIMARY KEY ("studyProgramsId", "universitiesId"))`
     );
     await queryRunner.query(
-      `CREATE TABLE "job_studyProgram" ("jobsId" uuid NOT NULL, "studyProgramId" uuid NOT NULL, CONSTRAINT "PK_848c20edbb8d781ecce14f7675a" PRIMARY KEY ("jobsId", "studyProgramId"))`
+      `CREATE TABLE "job_studyProgram" ("jobsId" uuid NOT NULL, "studyProgramsId" uuid NOT NULL, CONSTRAINT "PK_b45966e2c66068c9bdbe76b8d8d" PRIMARY KEY ("jobsId", "studyProgramsId"))`
     );
     await queryRunner.query(
       `CREATE TABLE "jobs_skills" ("jobsId" uuid NOT NULL, "skillsId" uuid NOT NULL, CONSTRAINT "PK_00889e4f99a8e183b24d6fb937a" PRIMARY KEY ("jobsId", "skillsId"))`
@@ -78,16 +78,16 @@ export class Init1544566838254 implements MigrationInterface {
       `ALTER TABLE "users_skills" ADD CONSTRAINT "FK_d109e7800e9d15f4993e44f8b52" FOREIGN KEY ("skillsId") REFERENCES "skills"("id") ON DELETE CASCADE`
     );
     await queryRunner.query(
-      `ALTER TABLE "studyProgram_university" ADD CONSTRAINT "FK_f4833af8ff06ad8eb8e1b48e124" FOREIGN KEY ("studyProgramId") REFERENCES "studyProgram"("id") ON DELETE CASCADE`
+      `ALTER TABLE "studyPrograms_universities" ADD CONSTRAINT "FK_6554623567381a10f4333ecb51d" FOREIGN KEY ("studyProgramsId") REFERENCES "studyPrograms"("id") ON DELETE CASCADE`
     );
     await queryRunner.query(
-      `ALTER TABLE "studyProgram_university" ADD CONSTRAINT "FK_b2a3d37d7cacfa376d1001aabbb" FOREIGN KEY ("universitiesId") REFERENCES "universities"("id") ON DELETE CASCADE`
+      `ALTER TABLE "studyPrograms_universities" ADD CONSTRAINT "FK_fc58d86c466613c1e5b005df75e" FOREIGN KEY ("universitiesId") REFERENCES "universities"("id") ON DELETE CASCADE`
     );
     await queryRunner.query(
       `ALTER TABLE "job_studyProgram" ADD CONSTRAINT "FK_72a389ab04d5a502b636e8546fa" FOREIGN KEY ("jobsId") REFERENCES "jobs"("id") ON DELETE CASCADE`
     );
     await queryRunner.query(
-      `ALTER TABLE "job_studyProgram" ADD CONSTRAINT "FK_b1d16e336c2d1b45d786b1b348c" FOREIGN KEY ("studyProgramId") REFERENCES "studyProgram"("id") ON DELETE CASCADE`
+      `ALTER TABLE "job_studyProgram" ADD CONSTRAINT "FK_f8e1be3143cd8ba50c54cc98365" FOREIGN KEY ("studyProgramsId") REFERENCES "studyPrograms"("id") ON DELETE CASCADE`
     );
     await queryRunner.query(
       `ALTER TABLE "jobs_skills" ADD CONSTRAINT "FK_3ffeca96c20aff476fac6183024" FOREIGN KEY ("jobsId") REFERENCES "jobs"("id") ON DELETE CASCADE`
@@ -105,16 +105,16 @@ export class Init1544566838254 implements MigrationInterface {
       `ALTER TABLE "jobs_skills" DROP CONSTRAINT "FK_3ffeca96c20aff476fac6183024"`
     );
     await queryRunner.query(
-      `ALTER TABLE "job_studyProgram" DROP CONSTRAINT "FK_b1d16e336c2d1b45d786b1b348c"`
+      `ALTER TABLE "job_studyProgram" DROP CONSTRAINT "FK_f8e1be3143cd8ba50c54cc98365"`
     );
     await queryRunner.query(
       `ALTER TABLE "job_studyProgram" DROP CONSTRAINT "FK_72a389ab04d5a502b636e8546fa"`
     );
     await queryRunner.query(
-      `ALTER TABLE "studyProgram_university" DROP CONSTRAINT "FK_b2a3d37d7cacfa376d1001aabbb"`
+      `ALTER TABLE "studyPrograms_universities" DROP CONSTRAINT "FK_fc58d86c466613c1e5b005df75e"`
     );
     await queryRunner.query(
-      `ALTER TABLE "studyProgram_university" DROP CONSTRAINT "FK_f4833af8ff06ad8eb8e1b48e124"`
+      `ALTER TABLE "studyPrograms_universities" DROP CONSTRAINT "FK_6554623567381a10f4333ecb51d"`
     );
     await queryRunner.query(
       `ALTER TABLE "users_skills" DROP CONSTRAINT "FK_d109e7800e9d15f4993e44f8b52"`
@@ -148,12 +148,12 @@ export class Init1544566838254 implements MigrationInterface {
     );
     await queryRunner.query(`DROP TABLE "jobs_skills"`);
     await queryRunner.query(`DROP TABLE "job_studyProgram"`);
-    await queryRunner.query(`DROP TABLE "studyProgram_university"`);
+    await queryRunner.query(`DROP TABLE "studyPrograms_universities"`);
     await queryRunner.query(`DROP TABLE "users_skills"`);
     await queryRunner.query(`DROP TABLE "bookmarks"`);
     await queryRunner.query(`DROP TABLE "organizations_users"`);
     await queryRunner.query(`DROP TABLE "jobs"`);
-    await queryRunner.query(`DROP TABLE "studyProgram"`);
+    await queryRunner.query(`DROP TABLE "studyPrograms"`);
     await queryRunner.query(`DROP TABLE "universities"`);
     await queryRunner.query(`DROP TABLE "jobApplications"`);
     await queryRunner.query(`DROP TYPE "jobApplications_state_enum"`);
