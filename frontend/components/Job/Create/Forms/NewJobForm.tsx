@@ -8,39 +8,29 @@ import Link from "next/link";
 import ScheduleTabs from "./ScheduleTabs";
 import { toast } from "react-toastify";
 import { ApolloError } from "apollo-client";
-import ReactDatePicker from "react-datepicker";
+import { useState } from "react";
+
+interface JobInterface {
+  title: string;
+  description: string;
+  organization: string;
+  salary: number;
+  perHour: boolean;
+  start: Date;
+  end: Date;
+  workload: number;
+}
 
 interface NewJobFormComponentProps {
   loading: boolean;
   error: ApolloError;
-  onCreate: (
-    formData: { title: string; description: string; organization: string }
-  ) => void;
+  passOrgId: (orgId: string) => void;
+  onCreate: (formData: JobInterface) => void;
 }
 
-interface NewJobFormComponentState {
-  title: string;
-  description: string;
-  organization: any;
-  salary: number;
-  perHour: boolean;
-  jobSchedule: JobSchedule;
+interface NewJobFormComponentState extends JobInterface {
   disableButton: boolean;
   scheduleTabs: any;
-}
-
-export enum JobScheduleType {
-  "fixed",
-  "temporary",
-  "oneTime",
-  "EMPTY"
-}
-
-export interface JobSchedule {
-  schedule: JobScheduleType;
-  start: Date;
-  end?: Date;
-  workload: number;
 }
 
 const uniOptions = [
@@ -60,11 +50,9 @@ class NewJobFormComponent extends React.Component<
     organization: "",
     salary: 0,
     perHour: false,
-    jobSchedule: {
-      schedule: JobScheduleType.EMPTY,
-      start: new Date(),
-      workload: 0
-    },
+    start: new Date(),
+    end: null,
+    workload: 0,
     disableButton: false,
     scheduleTabs: <Loader />
   };
@@ -81,41 +69,52 @@ class NewJobFormComponent extends React.Component<
 
   handleChange = (e, { name, value }) => {
     e.preventDefault();
+    if (name === "organization") {
+      this.props.passOrgId(value);
+    }
     this.setState({ [name]: value });
     console.log(name + " : " + value);
   };
 
   handleSubmit = e => {
-    this.props.onCreate(this.state);
+    //pass all state attributes except disableButton and scheuleTabs
+    let { disableButton, scheduleTabs, ...onCreateArgs } = this.state;
+    this.props.onCreate(onCreateArgs);
     this.setState({ disableButton: true });
+    this.triggerToast();
+    e.preventDefault();
+  };
+
+  triggerToast() {
     this.props.error &&
       !this.props.loading &&
       toast.error("Ein Fehler ist aufgetreten");
     !this.props.error &&
       !this.props.loading &&
       toast.success("Jobinserat wurde zur Validierung versandt. ");
-    e.preventDefault();
-  };
+  }
 
   render() {
     return (
       <Segment.Group>
         <Segment clearing>
-          <Form>
+          <Form onSubmit={this.handleSubmit}>
             <Segment>
               <Header>Grundinformationen</Header>
               <Form.Input
+                required
                 name={"title"}
                 label="Job Titel"
                 placeholder="Job Titel"
                 onChange={this.handleChange}
                 width={6}
               />
-              <Form.Field name={"organization"} width={6}>
+              <Form.Field name={"organization"} width={6} required>
                 <label>Arbeitgeber</label>
                 <OrganizationSelect handleChange={this.handleChange} />
               </Form.Field>
               <Form.TextArea
+                required
                 name={"description"}
                 label="Beschreibung"
                 placeholder="Stelle dein Jobangebot kurz vor"
@@ -130,7 +129,9 @@ class NewJobFormComponent extends React.Component<
                     <Form.Input
                       name={"salary"}
                       placeholder=" 0.00 CHF"
-                      onChange={this.handleChange}
+                      onChange={(e, { name, value }) => {
+                        this.handleChange(e, { name: name, value: +value });
+                      }}
                       width={4}
                     />
                     <Form.Checkbox
@@ -161,6 +162,7 @@ class NewJobFormComponent extends React.Component<
               <Header>Studenten Profil</Header>
               <p>Welche Universitäten möcheten Sie Hauptsächlich ansprechen?</p>
               <Form.Dropdown
+                required
                 width={5}
                 placeholder="Universität"
                 fluid
@@ -172,6 +174,7 @@ class NewJobFormComponent extends React.Component<
 
               <p>Was für Studiengänge möchten sie Ansprechen?</p>
               <Form.Dropdown
+                required
                 width={10}
                 placeholder="Studiengang"
                 fluid
@@ -182,7 +185,7 @@ class NewJobFormComponent extends React.Component<
               />
             </Segment>
             {!this.state.disableButton && (
-              <Button
+              <Form.Button
                 size={"big"}
                 type={"Submit"}
                 labelPosition={"right"}
@@ -190,7 +193,6 @@ class NewJobFormComponent extends React.Component<
                 color={"green"}
                 floated={"right"}
                 content={"Veröffendlichen"}
-                onClick={this.handleSubmit}
               />
             )}
             {this.state.disableButton && (
@@ -214,9 +216,27 @@ class NewJobFormComponent extends React.Component<
 }
 
 const CREATE_NEW_JOB = gql`
-  mutation CREATE_JOB($title: String!, $description: String, $org: ID!) {
+  mutation CREATE_JOB(
+    $title: String!
+    $organization: String!
+    $description: String!
+    $salary: Float!
+    $perHour: Boolean!
+    $workload: Float!
+    $start: String!
+    $end: String
+  ) {
     createJob(
-      input: { title: $title, description: $description, organization: $org }
+      input: {
+        title: $title
+        organization: $organization
+        description: $description
+        salary: $salary
+        isSalaryPerHour: $perHour
+        workload: $workload
+        start: $start
+        end: $end
+      }
     ) {
       id
       title
@@ -225,30 +245,41 @@ const CREATE_NEW_JOB = gql`
   }
 `;
 
-const NewJobForm: React.FC = () => (
-  <React.Fragment>
-    <Mutation
-      mutation={CREATE_NEW_JOB}
-      refetchQueries={[{ query: GET_ALL_ORGANIZATION_JOBS }]}
-      awaitRefetchQueries
-    >
-      {(createJob, { loading, error }) => (
-        <NewJobFormComponent
-          loading={loading}
-          error={error}
-          onCreate={async data => {
-            await createJob({
-              variables: {
-                title: data.title,
-                description: data.description,
-                org: data.organization
-              }
-            });
-          }}
-        />
-      )}
-    </Mutation>
-  </React.Fragment>
-);
+class NewJobForm extends React.Component {
+  state = {
+    orgId: ""
+  };
+
+  render() {
+    return (
+      <React.Fragment>
+        <Mutation
+          mutation={CREATE_NEW_JOB}
+          refetchQueries={[
+            {
+              query: GET_ALL_ORGANIZATION_JOBS,
+              variables: { orgId: this.state.orgId }
+            }
+          ]}
+          awaitRefetchQueries
+        >
+          {(createJob, { loading, error }) => (
+            <NewJobFormComponent
+              loading={loading}
+              error={error}
+              passOrgId={orgId => this.setState({ orgId: orgId })}
+              onCreate={async data => {
+                console.log({ ...data });
+                await createJob({
+                  variables: { ...data }
+                });
+              }}
+            />
+          )}
+        </Mutation>
+      </React.Fragment>
+    );
+  }
+}
 
 export default NewJobForm;

@@ -2,11 +2,9 @@ import gql from "graphql-tag";
 import * as React from "react";
 import { Query } from "react-apollo";
 import { Form } from "semantic-ui-react";
-import { ApolloError } from "apollo-client";
 
 interface OrganizationSelectComponentProps {
   loading: boolean;
-  error: ApolloError;
   data?: {
     organizations: {
       id: string;

@@ -23,7 +23,7 @@ class FixedJobForm extends React.Component<
   render() {
     return (
       <Form.Group>
-        <Form.Field>
+        <Form.Field required>
           <label>
             <Icon name="calendar" />
             Startdatum
@@ -38,7 +38,15 @@ class FixedJobForm extends React.Component<
             }}
           />
         </Form.Field>
-        <Form.Input width={3} label="Arbeitsstunden pro Woche" />
+        <Form.Input
+          required
+          width={3}
+          name="workload"
+          label="Arbeitsstunden pro Woche"
+          onChange={(e, { name, value }) => {
+            this.props.handleChange(e, { name: name, value: +value });
+          }}
+        />
       </Form.Group>
     );
   }
