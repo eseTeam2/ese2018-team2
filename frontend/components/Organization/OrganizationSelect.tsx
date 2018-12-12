@@ -2,9 +2,11 @@ import gql from "graphql-tag";
 import * as React from "react";
 import { Query } from "react-apollo";
 import { Form } from "semantic-ui-react";
+import { ApolloError } from "apollo-client";
 
 interface OrganizationSelectComponentProps {
   loading: boolean;
+  error: ApolloError;
   data?: {
     organizations: {
       id: string;
@@ -16,23 +18,24 @@ interface OrganizationSelectComponentProps {
 
 export const OrganizationSelectComponent: React.FC<
   OrganizationSelectComponentProps
-> = ({ loading, data, handleChange }) => (
-  <Form.Select
-    loading={loading}
-    placeholder={"Select organization"}
-    name={"organization"}
-    onChange={handleChange}
-    options={
-      data
-        ? data.organizations.map(org => ({
-            key: org.id,
-            value: org.id,
-            text: org.name
-          }))
-        : []
-    }
-  />
-);
+> = ({ loading, data, handleChange }) =>
+  !loading && (
+    <Form.Select
+      loading={loading}
+      placeholder={"Select organization"}
+      name={"organization"}
+      onChange={handleChange}
+      options={
+        data
+          ? data.organizations.map(org => ({
+              key: org.id,
+              value: org.id,
+              text: org.name
+            }))
+          : []
+      }
+    />
+  );
 
 const GET_ALL_ORGS = gql`
   query GetOrgs {

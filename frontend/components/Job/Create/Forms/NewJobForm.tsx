@@ -1,12 +1,4 @@
-import {
-  Button,
-  Dropdown,
-  Form,
-  Grid,
-  Header,
-  Message,
-  Segment
-} from "semantic-ui-react";
+import { Button, Form, Grid, Header, Loader, Segment } from "semantic-ui-react";
 import OrganizationSelect from "../../../Organization/OrganizationSelect";
 import gql from "graphql-tag";
 import { Mutation } from "react-apollo";
@@ -14,44 +6,37 @@ import * as React from "react";
 import { GET_ALL_ORGANIZATION_JOBS } from "../../../Organization/Jobs/OrganisationOverview";
 import Link from "next/link";
 import ScheduleTabs from "./ScheduleTabs";
-
-const SuccessMessage = (
-  <Segment>
-    <Message attached>
-      <Message.Header>Jobinserat wurde erfolgreich gespeichert</Message.Header>
-      <p>
-        Vor der definitiven Veröffendlichung müssen admins das inserat
-        validieren. Wir bitten Sie um 1-2 Arbeitstage Geduld.
-      </p>
-    </Message>
-  </Segment>
-);
+import { toast } from "react-toastify";
+import { ApolloError } from "apollo-client";
+import ReactDatePicker from "react-datepicker";
 
 interface NewJobFormComponentProps {
   loading: boolean;
+  error: ApolloError;
   onCreate: (
     formData: { title: string; description: string; organization: string }
   ) => void;
 }
 
 interface NewJobFormComponentState {
-  showMessage: boolean;
   title: string;
   description: string;
   organization: any;
   salary: number;
   perHour: boolean;
   jobSchedule: JobSchedule;
+  disableButton: boolean;
+  scheduleTabs: any;
 }
 
-enum JobScheduleType {
+export enum JobScheduleType {
   "fixed",
   "temporary",
   "oneTime",
   "EMPTY"
 }
 
-interface JobSchedule {
+export interface JobSchedule {
   schedule: JobScheduleType;
   start: Date;
   end?: Date;
@@ -75,29 +60,46 @@ class NewJobFormComponent extends React.Component<
     organization: "",
     salary: 0,
     perHour: false,
-    showMessage: false,
     jobSchedule: {
       schedule: JobScheduleType.EMPTY,
       start: new Date(),
       workload: 0
-    }
+    },
+    disableButton: false,
+    scheduleTabs: <Loader />
   };
 
+  /**
+   * Because the parent component is rendered on the server side, and Schedule Tabs
+   * needs the window component, it has to be rendered in a second step
+   */
+  componentDidMount(): void {
+    this.setState({
+      scheduleTabs: <ScheduleTabs handleChange={this.handleChange} />
+    });
+  }
+
   handleChange = (e, { name, value }) => {
+    e.preventDefault();
     this.setState({ [name]: value });
     console.log(name + " : " + value);
   };
 
   handleSubmit = e => {
     this.props.onCreate(this.state);
-    this.setState({ showMessage: true });
+    this.setState({ disableButton: true });
+    this.props.error &&
+      !this.props.loading &&
+      toast.error("Ein Fehler ist aufgetreten");
+    !this.props.error &&
+      !this.props.loading &&
+      toast.success("Jobinserat wurde zur Validierung versandt. ");
     e.preventDefault();
   };
 
   render() {
     return (
-      <Segment.Group basic>
-        {this.state.showMessage && SuccessMessage}
+      <Segment.Group>
         <Segment clearing>
           <Form>
             <Segment>
@@ -152,7 +154,8 @@ class NewJobFormComponent extends React.Component<
             <Segment>
               <Header>Planung</Header>
               <p>Welche art von Anstellung möchten sie Anbieten?</p>
-              <ScheduleTabs handleChange={this.handleChange} />
+              {/*Client side rendering of schedule Tabs*/}
+              {this.state.scheduleTabs}
             </Segment>
             <Segment>
               <Header>Studenten Profil</Header>
@@ -178,7 +181,7 @@ class NewJobFormComponent extends React.Component<
                 options={studyProgOptions}
               />
             </Segment>
-            {!this.state.showMessage && (
+            {!this.state.disableButton && (
               <Button
                 size={"big"}
                 type={"Submit"}
@@ -190,7 +193,7 @@ class NewJobFormComponent extends React.Component<
                 onClick={this.handleSubmit}
               />
             )}
-            {this.state.showMessage && (
+            {this.state.disableButton && (
               <Link href={"/org/jobs"}>
                 <Button
                   size={"big"}
@@ -222,16 +225,17 @@ const CREATE_NEW_JOB = gql`
   }
 `;
 
-const NewJobForm: React.SFC<> = () => (
+const NewJobForm: React.FC = () => (
   <React.Fragment>
     <Mutation
       mutation={CREATE_NEW_JOB}
       refetchQueries={[{ query: GET_ALL_ORGANIZATION_JOBS }]}
       awaitRefetchQueries
     >
-      {(createJob, { loading }) => (
+      {(createJob, { loading, error }) => (
         <NewJobFormComponent
           loading={loading}
+          error={error}
           onCreate={async data => {
             await createJob({
               variables: {
