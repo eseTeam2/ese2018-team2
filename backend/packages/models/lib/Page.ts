@@ -14,8 +14,7 @@ export class Page {
   id: string;
 
   @ManyToMany(type => StudyProgram)
-  @JoinColumn({ name: "pages_studyPrograms" })
-  studyProgramms: StudyProgram[];
+  studyPrograms: StudyProgram[];
 
   @ManyToOne(type => Organization, organization => organization.pages)
   organization: Organization;

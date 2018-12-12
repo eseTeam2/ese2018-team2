@@ -1,7 +1,11 @@
+import {
+  Job,
+  Organization,
+  Page,
+  StudyProgram,
+  User
+} from "@unijobs/backend-modules-models";
 import { Connection, Repository } from "typeorm";
-import { Job, Page, StudyProgram } from "@unijobs/backend-modules-models";
-import { Organization } from "@unijobs/backend-modules-models";
-import { User } from "@unijobs/backend-modules-models";
 import enforceAuth, { enforceAdmin, getUserId, isAdmin } from "./Utils";
 
 export class OrganizationRepository {
@@ -73,7 +77,12 @@ export class OrganizationRepository {
       throw new Error("Permission denied");
     }
 
-    return results[0].pages;
+    return this.connection
+      .getRepository(Page)
+      .createQueryBuilder("page")
+      .leftJoinAndSelect("page.studyPrograms", "studyProgram")
+      .where('page."organizationId" = :o', { o: organizationId })
+      .getMany();
   }
 
   async createPage(
@@ -86,13 +95,14 @@ export class OrganizationRepository {
 
     const p = new Page();
     p.organization = await this.organizations.findOne(organizationId);
-    p.studyProgramms = await this.connection
+    /*p.studyProgramms = await this.connection
       .getRepository(StudyProgram)
-      .findByIds(studyPrograms);
+      .findByIds(studyPrograms);*/
 
-    const result = await this.connection.getRepository(StudyProgram).save(p);
-    return await this.connection
+    await this.connection.getRepository(Page).save(p);
+    return true;
+    /*return await this.connection
       .getRepository(StudyProgram)
-      .findOne(result.id, { relations: ["studyPrograms"] });
+      .findOne(result.id, { relations: ["studyPrograms"] });*/
   }
 }
