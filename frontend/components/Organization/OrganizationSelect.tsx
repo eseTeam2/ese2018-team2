@@ -16,24 +16,23 @@ interface OrganizationSelectComponentProps {
 
 export const OrganizationSelectComponent: React.FC<
   OrganizationSelectComponentProps
-> = ({ loading, data, handleChange }) =>
-  !loading && (
-    <Form.Select
-      loading={loading}
-      placeholder={"Select organization"}
-      name={"organization"}
-      onChange={handleChange}
-      options={
-        data
-          ? data.organizations.map(org => ({
-              key: org.id,
-              value: org.id,
-              text: org.name
-            }))
-          : []
-      }
-    />
-  );
+> = ({ loading, data, handleChange }) => (
+  <Form.Select
+    loading={loading}
+    placeholder={"Select organization"}
+    name={"organization"}
+    onChange={handleChange}
+    options={
+      !loading && !!data
+        ? data.organizations.map(org => ({
+            key: org.id,
+            value: org.id,
+            text: org.name
+          }))
+        : []
+    }
+  />
+);
 
 const GET_ALL_ORGS = gql`
   query GetOrgs {
