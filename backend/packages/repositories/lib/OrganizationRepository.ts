@@ -1,5 +1,5 @@
 import { Connection, Repository } from "typeorm";
-import { Job } from "@unijobs/backend-modules-models";
+import { Job, Page, StudyProgram } from "@unijobs/backend-modules-models";
 import { Organization } from "@unijobs/backend-modules-models";
 import { User } from "@unijobs/backend-modules-models";
 import enforceAuth, { enforceAdmin, getUserId, isAdmin } from "./Utils";
@@ -57,5 +57,42 @@ export class OrganizationRepository {
     await this.jobs.delete({ organization: { id: organizationId } });
     await this.organizations.delete({ id: organizationId });
     return true;
+  }
+
+  async getPages(organizationId: string) {
+    const results = await this.organizations.find({
+      where: {
+        id: organizationId
+      },
+      relations: ["pages"]
+    });
+
+    if (results.length < 0) {
+      console.log("No organization found");
+      //TODO better handling
+      throw new Error("Permission denied");
+    }
+
+    return results[0].pages;
+  }
+
+  async createPage(
+    organizationId: string,
+    studyPrograms: string[],
+    session: Express.Session
+  ) {
+    enforceAuth(session);
+    // TODO Check user priviliges
+
+    const p = new Page();
+    p.organization = await this.organizations.findOne(organizationId);
+    p.studyProgramms = await this.connection
+      .getRepository(StudyProgram)
+      .findByIds(studyPrograms);
+
+    const result = await this.connection.getRepository(StudyProgram).save(p);
+    return await this.connection
+      .getRepository(StudyProgram)
+      .findOne(result.id, { relations: ["studyPrograms"] });
   }
 }

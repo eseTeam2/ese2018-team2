@@ -20,7 +20,9 @@ export interface Organization {
   email: string;
   phone: string;
   approved: boolean;
+  employee: Promise<any[]>;
   jobs: Promise<any[]>;
+  pages: any[];
 }
 
 export interface Job {
@@ -114,7 +116,6 @@ export interface StudyProgram {
 
 export interface OrganizationPage {
   id: string;
-  name: string;
   studyPrograms: any[];
 }
 

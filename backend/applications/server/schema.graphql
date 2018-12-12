@@ -22,8 +22,9 @@ type Organization {
   email: String!
   phone: String
   jobs: [Job]!
-  employees: [User]!
+  employee: [User]!
   approved: Boolean!
+  pages: [OrganizationPage!]!
 }
 
 type StudyProgram {
