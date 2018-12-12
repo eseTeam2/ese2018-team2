@@ -120,6 +120,10 @@ function sleep(millis: number) {
     await connection.getRepository(StudyProgram).save(p);
   }
 
+  const availableStudyPrograms = await connection
+    .getRepository(StudyProgram)
+    .find();
+
   for (let i = 0; i < 200; i++) {
     const job = new Job();
     job.start = new Date();
@@ -130,6 +134,9 @@ function sleep(millis: number) {
     job.salary = Math.floor(Math.random() * 100) + 1;
     job.skills = [skills[Math.floor(Math.random() * skills.length)]];
     job.workload = Math.floor(Math.random() * 90) + 10;
+    job.preferredStudyPrograms = [
+      availableStudyPrograms[Math.floor(Math.random() * studyPrograms.length)]
+    ];
 
     await connection.getRepository(Job).save(job);
   }

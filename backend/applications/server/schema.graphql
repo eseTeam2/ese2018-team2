@@ -155,6 +155,8 @@ type JobAutocompletion {
 type Query {
   availableStudyPrograms: [StudyProgram!]!
 
+  page(pageSlug: String!): [Job!]!
+
   jobs(first: Int, last: Int, before: String, after: String): JobConnection!
 
   job(id: String!): Job

@@ -11,6 +11,7 @@ import search from "./search";
 import searchAutocompletions from "./searchAutocompletions";
 import skills from "./skills";
 import users from "./users";
+import page from "./page";
 
 export const Query: QueryResolvers.Type = {
   jobs,
@@ -24,7 +25,8 @@ export const Query: QueryResolvers.Type = {
   search,
   searchAutocompletions,
   job,
-  availableStudyPrograms
+  availableStudyPrograms,
+  page
 };
 
 export default Query;

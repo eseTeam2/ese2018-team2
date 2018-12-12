@@ -102,4 +102,25 @@ export class OrganizationRepository {
     await this.connection.getRepository(Page).save(p);
     return true;
   }
+
+  async getJobsForPage(pageSlug: string) {
+    const pages = await this.connection
+      .getRepository(Page)
+      .findByIds([pageSlug], { relations: ["studyPrograms"] });
+
+    if (pages.length !== 1) {
+      throw new Error("404");
+    }
+
+    const jobs = await this.connection
+      .getRepository(Job)
+      .createQueryBuilder("job")
+      .leftJoin("job.preferredStudyPrograms", "studyprogram")
+      .where("studyprogram.id IN (:...ids)", {
+        ids: pages[0].studyPrograms.map(s => s.id)
+      })
+      .getMany();
+
+    return this.jobs.findByIds(jobs.map(j => j.id));
+  }
 }
