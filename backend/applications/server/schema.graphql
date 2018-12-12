@@ -30,14 +30,22 @@ interface JobInterface {
   id: ID!
   title: String!
   description: String!
+  isSalaryPerHour: Boolean!
   salary: Float!
+  start: String!
+  end: String
+  workload: Int!
 }
 
 type Job {
   id: ID!
   title: String!
   description: String!
+  isSalaryPerHour: Boolean!
   salary: Float!
+  start: String!
+  end: String
+  workload: Int!
   organization: Organization!
   applied: Boolean!
 }
@@ -46,7 +54,11 @@ type OrganizationJob implements JobInterface {
   id: ID!
   title: String!
   description: String!
+  isSalaryPerHour: Boolean!
   salary: Float!
+  start: String!
+  end: String
+  workload: Int!
   applicationCount: Int!
 }
 

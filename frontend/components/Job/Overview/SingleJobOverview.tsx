@@ -19,8 +19,14 @@ const query = gql`
         id
         name
         email
+        phone
       }
       applied
+      salary
+      isSalaryPerHour
+      workload
+      start
+      end
     }
   }
 `;
