@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class Init1544610597739 implements MigrationInterface {
+export class Init1544611863557 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<any> {
     await queryRunner.query(
       `CREATE TABLE "universities" ("id" uuid NOT NULL DEFAULT uuid_generate_v4(), "name" character varying NOT NULL, CONSTRAINT "UQ_25b08a78732a663bb35872eaa70" UNIQUE ("name"), CONSTRAINT "PK_8da52f2cee6b407559fdbabf59e" PRIMARY KEY ("id"))`
@@ -34,6 +34,9 @@ export class Init1544610597739 implements MigrationInterface {
     );
     await queryRunner.query(
       `CREATE TABLE "studyPrograms_universities" ("studyProgramsId" uuid NOT NULL, "universitiesId" uuid NOT NULL, CONSTRAINT "PK_a010693f9e62f35048b5d2e9fee" PRIMARY KEY ("studyProgramsId", "universitiesId"))`
+    );
+    await queryRunner.query(
+      `CREATE TABLE "pages_study_programs_study_programs" ("pagesId" uuid NOT NULL, "studyProgramsId" uuid NOT NULL, CONSTRAINT "PK_a04daeb69fa51646e10310adfb0" PRIMARY KEY ("pagesId", "studyProgramsId"))`
     );
     await queryRunner.query(
       `CREATE TABLE "organizations_users" ("organizationsId" uuid NOT NULL, "usersId" uuid NOT NULL, CONSTRAINT "PK_da93ab06ae4af19e3a142813950" PRIMARY KEY ("organizationsId", "usersId"))`
@@ -70,6 +73,12 @@ export class Init1544610597739 implements MigrationInterface {
     );
     await queryRunner.query(
       `ALTER TABLE "studyPrograms_universities" ADD CONSTRAINT "FK_fc58d86c466613c1e5b005df75e" FOREIGN KEY ("universitiesId") REFERENCES "universities"("id") ON DELETE CASCADE`
+    );
+    await queryRunner.query(
+      `ALTER TABLE "pages_study_programs_study_programs" ADD CONSTRAINT "FK_518443996c1098bcff08504915c" FOREIGN KEY ("pagesId") REFERENCES "pages"("id") ON DELETE CASCADE`
+    );
+    await queryRunner.query(
+      `ALTER TABLE "pages_study_programs_study_programs" ADD CONSTRAINT "FK_845aca920ec335a38c8b8080b92" FOREIGN KEY ("studyProgramsId") REFERENCES "studyPrograms"("id") ON DELETE CASCADE`
     );
     await queryRunner.query(
       `ALTER TABLE "organizations_users" ADD CONSTRAINT "FK_c00bc2922da6310512964d28729" FOREIGN KEY ("organizationsId") REFERENCES "organizations"("id") ON DELETE CASCADE`
@@ -135,6 +144,12 @@ export class Init1544610597739 implements MigrationInterface {
       `ALTER TABLE "organizations_users" DROP CONSTRAINT "FK_c00bc2922da6310512964d28729"`
     );
     await queryRunner.query(
+      `ALTER TABLE "pages_study_programs_study_programs" DROP CONSTRAINT "FK_845aca920ec335a38c8b8080b92"`
+    );
+    await queryRunner.query(
+      `ALTER TABLE "pages_study_programs_study_programs" DROP CONSTRAINT "FK_518443996c1098bcff08504915c"`
+    );
+    await queryRunner.query(
       `ALTER TABLE "studyPrograms_universities" DROP CONSTRAINT "FK_fc58d86c466613c1e5b005df75e"`
     );
     await queryRunner.query(
@@ -160,6 +175,7 @@ export class Init1544610597739 implements MigrationInterface {
     await queryRunner.query(`DROP TABLE "users_skills"`);
     await queryRunner.query(`DROP TABLE "bookmarks"`);
     await queryRunner.query(`DROP TABLE "organizations_users"`);
+    await queryRunner.query(`DROP TABLE "pages_study_programs_study_programs"`);
     await queryRunner.query(`DROP TABLE "studyPrograms_universities"`);
     await queryRunner.query(`DROP TABLE "jobs"`);
     await queryRunner.query(`DROP TABLE "jobApplications"`);

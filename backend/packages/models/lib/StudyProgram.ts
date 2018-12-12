@@ -23,7 +23,6 @@ export class StudyProgram {
   universities: University[];
 
   @ManyToMany(type => Page)
-  @JoinColumn()
   pages: Page[];
 
   @ManyToMany(type => Job)

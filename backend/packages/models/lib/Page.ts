@@ -1,12 +1,12 @@
 import {
   Entity,
-  JoinColumn,
+  JoinTable,
   ManyToMany,
-  PrimaryGeneratedColumn,
-  ManyToOne
+  ManyToOne,
+  PrimaryGeneratedColumn
 } from "typeorm";
-import { StudyProgram } from "./StudyProgram";
 import { Organization } from "./Organization";
+import { StudyProgram } from "./StudyProgram";
 
 @Entity("pages")
 export class Page {
@@ -14,6 +14,7 @@ export class Page {
   id: string;
 
   @ManyToMany(type => StudyProgram)
+  @JoinTable()
   studyPrograms: StudyProgram[];
 
   @ManyToOne(type => Organization, organization => organization.pages)

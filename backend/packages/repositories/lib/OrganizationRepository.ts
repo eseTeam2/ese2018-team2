@@ -95,14 +95,11 @@ export class OrganizationRepository {
 
     const p = new Page();
     p.organization = await this.organizations.findOne(organizationId);
-    /*p.studyProgramms = await this.connection
+    p.studyPrograms = await this.connection
       .getRepository(StudyProgram)
-      .findByIds(studyPrograms);*/
+      .findByIds(studyPrograms);
 
     await this.connection.getRepository(Page).save(p);
     return true;
-    /*return await this.connection
-      .getRepository(StudyProgram)
-      .findOne(result.id, { relations: ["studyPrograms"] });*/
   }
 }
